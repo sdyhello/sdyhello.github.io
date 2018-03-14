@@ -144,9 +144,9 @@
 				<key>displayName</key>
 				<string>CCLabelTTF</string>
 				<key>memberVarAssignmentName</key>
-				<string></string>
+				<string>m_title</string>
 				<key>memberVarAssignmentType</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>properties</key>
 				<array>
 					<dict>
@@ -284,9 +284,9 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>546.04803466796875</real>
-							<real>164.16001892089844</real>
-							<integer>0</integer>
+							<real>50</real>
+							<real>25</real>
+							<integer>4</integer>
 						</array>
 					</dict>
 					<dict>
@@ -548,8 +548,6 @@
 				<true/>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
@@ -561,13 +559,13 @@
 			<key>ext</key>
 			<string>iphone</string>
 			<key>height</key>
-			<integer>640</integer>
+			<integer>1136</integer>
 			<key>name</key>
 			<string>iPhone 5 Landscape</string>
 			<key>scale</key>
 			<real>1</real>
 			<key>width</key>
-			<integer>1136</integer>
+			<integer>640</integer>
 		</dict>
 	</array>
 	<key>sequences</key>
