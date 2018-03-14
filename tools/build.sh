@@ -1,0 +1,1 @@
+browserify -t coffeeify ./src/main.coffee --debug > ./main.js

@@ -1,87 +1,12 @@
-/**
- * A brief explanation for "project.json":
- * Here is the content of project.json file, this is the global configuration for your game, you can modify it to customize some behavior.
- * The detail of each field is under it.
- {
-    "project_type": "javascript",
-    // "project_type" indicate the program language of your project, you can ignore this field
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var firstFunc;
 
-    "debugMode"     : 1,
-    // "debugMode" possible values :
-    //      0 - No message will be printed.
-    //      1 - cc.error, cc.assert, cc.warn, cc.log will print in console.
-    //      2 - cc.error, cc.assert, cc.warn will print in console.
-    //      3 - cc.error, cc.assert will print in console.
-    //      4 - cc.error, cc.assert, cc.warn, cc.log will print on canvas, available only on web.
-    //      5 - cc.error, cc.assert, cc.warn will print on canvas, available only on web.
-    //      6 - cc.error, cc.assert will print on canvas, available only on web.
-
-    "showFPS"       : true,
-    // Left bottom corner fps information will show when "showFPS" equals true, otherwise it will be hide.
-
-    "frameRate"     : 60,
-    // "frameRate" set the wanted frame rate for your game, but the real fps depends on your game implementation and the running environment.
-
-    "noCache"       : false,
-    // "noCache" set whether your resources will be loaded with a timestamp suffix in the url.
-    // In this way, your resources will be force updated even if the browser holds a cache of it.
-    // It's very useful for mobile browser debugging.
-
-    "id"            : "gameCanvas",
-    // "gameCanvas" sets the id of your canvas element on the web page, it's useful only on web.
-
-    "renderMode"    : 0,
-    // "renderMode" sets the renderer type, only useful on web :
-    //      0 - Automatically chosen by engine
-    //      1 - Forced to use canvas renderer
-    //      2 - Forced to use WebGL renderer, but this will be ignored on mobile browsers
-
-    "engineDir"     : "frameworks/cocos2d-html5/",
-    // In debug mode, if you use the whole engine to develop your game, you should specify its relative path with "engineDir",
-    // but if you are using a single engine file, you can ignore it.
-
-    "modules"       : ["cocos2d"],
-    // "modules" defines which modules you will need in your game, it's useful only on web,
-    // using this can greatly reduce your game's resource size, and the cocos console tool can package your game with only the modules you set.
-    // For details about modules definitions, you can refer to "../../frameworks/cocos2d-html5/modulesConfig.json".
-
-    "jsList"        : [
-    ]
-    // "jsList" sets the list of js files in your game.
- }
- *
- */
-
-cc.game.onStart = function(){
-    var sys = cc.sys;
-    if(!sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
-        document.body.removeChild(document.getElementById("cocosLoading"));
-
-    // Pass true to enable retina display, on Android disabled by default to improve performance
-    cc.view.enableRetina(sys.os === sys.OS_IOS ? true : false);
-
-    // Disable auto full screen on baidu and wechat, you might also want to eliminate sys.BROWSER_TYPE_MOBILE_QQ
-    if (sys.isMobile && 
-        sys.browserType !== sys.BROWSER_TYPE_BAIDU &&
-        sys.browserType !== sys.BROWSER_TYPE_WECHAT) {
-        cc.view.enableAutoFullScreen(true);
-    }
-
-    // Adjust viewport meta
-    cc.view.adjustViewPort(true);
-
-    // Uncomment the following line to set a fixed orientation for your game
-    // cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
-
-    // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(960, 640, cc.ResolutionPolicy.SHOW_ALL);
-
-    // The game will be resized when browser size change
-    cc.view.resizeWithBrowserSize(true);
-
-    //load resources
-    cc.LoaderScene.preload(g_resources, function () {
-        cc.director.runScene(new HelloWorldScene());
-    }, this);
+firstFunc = function() {
+  return console.log("hello world");
 };
-cc.game.run();
+
+firstFunc();
+
+
+},{}]},{},[1])
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3Vzci9sb2NhbC9saWIvbm9kZV9tb2R1bGVzL2Jyb3dzZXJpZnkvbm9kZV9tb2R1bGVzL2Jyb3dzZXItcGFjay9fcHJlbHVkZS5qcyIsInNyYy9tYWluLmNvZmZlZSJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQ0FBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6ImdlbmVyYXRlZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyIoZnVuY3Rpb24gZSh0LG4scil7ZnVuY3Rpb24gcyhvLHUpe2lmKCFuW29dKXtpZighdFtvXSl7dmFyIGE9dHlwZW9mIHJlcXVpcmU9PVwiZnVuY3Rpb25cIiYmcmVxdWlyZTtpZighdSYmYSlyZXR1cm4gYShvLCEwKTtpZihpKXJldHVybiBpKG8sITApO3ZhciBmPW5ldyBFcnJvcihcIkNhbm5vdCBmaW5kIG1vZHVsZSAnXCIrbytcIidcIik7dGhyb3cgZi5jb2RlPVwiTU9EVUxFX05PVF9GT1VORFwiLGZ9dmFyIGw9bltvXT17ZXhwb3J0czp7fX07dFtvXVswXS5jYWxsKGwuZXhwb3J0cyxmdW5jdGlvbihlKXt2YXIgbj10W29dWzFdW2VdO3JldHVybiBzKG4/bjplKX0sbCxsLmV4cG9ydHMsZSx0LG4scil9cmV0dXJuIG5bb10uZXhwb3J0c312YXIgaT10eXBlb2YgcmVxdWlyZT09XCJmdW5jdGlvblwiJiZyZXF1aXJlO2Zvcih2YXIgbz0wO288ci5sZW5ndGg7bysrKXMocltvXSk7cmV0dXJuIHN9KSIsInZhciBmaXJzdEZ1bmM7XG5cbmZpcnN0RnVuYyA9IGZ1bmN0aW9uKCkge1xuICByZXR1cm4gY29uc29sZS5sb2coXCJoZWxsbyB3b3JsZFwiKTtcbn07XG5cbmZpcnN0RnVuYygpO1xuXG4vLyMgc291cmNlTWFwcGluZ1VSTD1kYXRhOmFwcGxpY2F0aW9uL2pzb247Y2hhcnNldD11dGYtODtiYXNlNjQsZXlKMlpYSnphVzl1SWpvekxDSm1hV3hsSWpvaUwxVnpaWEp6TDNSaGIzZDFMM04wZFdSNUwwRnlhMkZrTDBGeWEyRmtSMkZ0WlM5emNtTXZiV0ZwYmk1amIyWm1aV1VpTENKemIzVnlZMlZTYjI5MElqb2lJaXdpYzI5MWNtTmxjeUk2V3lJdlZYTmxjbk12ZEdGdmQzVXZjM1IxWkhrdlFYSnJZV1F2UVhKcllXUkhZVzFsTDNOeVl5OXRZV2x1TG1OdlptWmxaU0pkTENKdVlXMWxjeUk2VzEwc0ltMWhjSEJwYm1keklqb2lRVUZCUVN4SlFVRkJPenRCUVVGQkxGTkJRVUVzUjBGQldTeFRRVUZCTzFOQlExZ3NUMEZCVHl4RFFVRkRMRWRCUVZJc1EwRkJXU3hoUVVGYU8wRkJSRmM3TzBGQlIxb3NVMEZCUVN4RFFVRkJJbjA9XG4iXX0=
