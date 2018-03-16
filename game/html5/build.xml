@@ -172,6 +172,7 @@
             <sources dir="${basedir}">
                 <file name="src/resource.js"/>
                 <file name="src/scene/MenuScene.js"/>
+                <file name="src/ui/SoundButton.js"/>
                 <file name="main.js"/>
 
             </sources>
