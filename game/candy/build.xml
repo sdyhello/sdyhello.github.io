@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
-<project name="Javascript compress project" basedir="/Users/taowu/study/ZenGames/Candy" default="compile">
+<project name="Javascript compress project" basedir="/Users/taowu/study/Arkad/Candy" default="compile">
 
     <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
-             classpath="/Users/taowu/work/FarmJs/frameworks/cocos2d-x/tools/cocos2d-console/plugins/plugin_compile/build_web/bin/compiler-1.7.jar"/>
+             classpath="/Users/taowu/work/MOBAGame/frameworks/cocos2d-x/tools/cocos2d-console/plugins/plugin_compile/build_web/bin/compiler-1.7.jar"/>
 
     <target name="compile">
         <jscomp compilationLevel="simple" 
                 warning="quiet"
                 debug="false" 
-                output="/Users/taowu/study/ZenGames/Candy/publish/html5/game.min.js"
+                output="/Users/taowu/study/Arkad/Candy/publish/html5/game.min.js"
                 languagein="ECMASCRIPT5"
                 
                 >
-            <sources dir="/Users/taowu/study/ZenGames/Candy/frameworks/cocos2d-html5">
+            <sources dir="/Users/taowu/study/Arkad/Candy/frameworks/cocos2d-html5">
                 <file name="CCBoot.js"/>
                 <file name="cocos2d/core/event-manager/CCEventHelper.js"/>
                 <file name="CCDebugger.js"/>
@@ -180,6 +180,7 @@
                 <file name="src/HomeScene.js"/>
                 <file name="src/SettingScene.js"/>
                 <file name="src/HelpScene.js"/>
+                <file name="src/test.js"/>
                 <file name="main.js"/>
 
             </sources>
