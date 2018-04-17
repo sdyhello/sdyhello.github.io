@@ -1,0 +1,8 @@
+{
+	"name": "readFile",
+	"dependencies": {
+	    "async": "^2.5.0",
+	    "csv": "^1.1.1",
+	    "coffee-script": "^1.9.1"
+  	}
+}
