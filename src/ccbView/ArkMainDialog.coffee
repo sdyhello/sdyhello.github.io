@@ -83,7 +83,7 @@ class ArkMainDialog
 
         dataTable = [totalAssetsTable, receivableTable, depositReceiveTable, retainedProfitsTable, shortLoanTable, longLoanTable]
 
-        console.log("on calc")
+        @showResult("")
         eventManager.send eventNames.GAME_GET_RESULT,
             data: dataTable
             callback: (str)=>

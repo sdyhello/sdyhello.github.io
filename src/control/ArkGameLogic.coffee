@@ -30,7 +30,7 @@ class GameLogic
 
     _registerEvents: ->
         eventManager.listen(eventNames.GAME_GET_RESULT, (obj)=>
-            console.log("get result")
+            g_log_table = []
             obj.callback?(@_getResult(obj.data))
         )
 
@@ -38,7 +38,7 @@ class GameLogic
         totalScore = 0
         totalAssetsIndex = @_getTypeRowNum(data, needCalcItem.totalAssets)
         g_statisticsYears = @_getStatisticsYears(data, totalAssetsIndex)
-        g_log_table.push "totalAssetsIndex #{totalAssetsIndex}, statisticsYears:#{g_statisticsYears}\n"
+        g_log_table.push "totalAssetsIndex #{totalAssetsIndex}, statisticsYears:#{g_statisticsYears}"
         DEBUG("totalAssetsIndex #{totalAssetsIndex}, statisticsYears:#{g_statisticsYears}")
         for own calcItem, value of needCalcItem
             continue if value in ["totalAssets", "retainedProfits"]
@@ -47,7 +47,7 @@ class GameLogic
         totalScore += @_getRetainedProfitsScore(data)
         totalScore += @_getRoeScore(data)
         totalScore = Math.ceil(totalScore)
-        g_log_table.push "totalScore: #{totalScore}\n"
+        g_log_table.push "totalScore: #{totalScore}"
         console.log("totalScore: #{totalScore}")
         return JSON.stringify(g_log_table)
 
@@ -85,7 +85,7 @@ class GameLogic
 
     _calcScore : (data, type, typeStr, totalAssetsIndex)->
         typeNum = @_getTypeRowNum(data, typeStr)
-        g_log_table.push "#{data[typeNum][0]}, #{data[typeNum][1]}\n"
+        g_log_table.push "#{data[typeNum][0]}, #{data[typeNum][1]}"
         DEBUG(data[typeNum][0], data[typeNum][1], typeNum)
         totalPercent = 0
         for yearIndex in [1..g_statisticsYears]
@@ -93,7 +93,7 @@ class GameLogic
             totalPercent += @_getValidNumber(data[typeNum][yearIndex]) / @_getValidNumber(data[totalAssetsIndex][yearIndex]) * 100
         averagePercent = totalPercent / g_statisticsYears
         score = @_getScore(type, averagePercent)
-        g_log_table.push "#{needCalcItem[type]} percent:#{averagePercent.toFixed(2)}%, score :#{score.toFixed(2)}\n"
+        g_log_table.push "#{needCalcItem[type]} percent:#{averagePercent.toFixed(2)}%, score :#{score.toFixed(2)}"
         DEBUG("#{needCalcItem[type]} percent:#{averagePercent.toFixed(2)}%, score :#{score.toFixed(2)}")
         return score
 
@@ -114,11 +114,11 @@ class GameLogic
     #计算N年净利润复合增长速度得分
     _getRetainedProfitsScore:  (data)->
         allRetainedProfits = @_getTableByName(data, needCalcItem.retainedProfits)
-        g_log_table.push "初始净利润：#{allRetainedProfits[allRetainedProfits.length - 1]}, 当前净利润:#{allRetainedProfits[0]}\n"
+        g_log_table.push "初始净利润：#{allRetainedProfits[allRetainedProfits.length - 1]}, 当前净利润:#{allRetainedProfits[0]}"
         DEBUG("初始净利润：#{allRetainedProfits[allRetainedProfits.length - 1]}, 当前净利润:#{allRetainedProfits[0]}")
         addRetainedProfits = allRetainedProfits[0] / allRetainedProfits[allRetainedProfits.length - 1]
         averagePercent = (@_getCompoundRate(addRetainedProfits, g_statisticsYears) - 1) * 100
-        g_log_table.push "净利润复合增长速度:#{JSON.stringify(averagePercent)}\n"
+        g_log_table.push "净利润复合增长速度:#{JSON.stringify(averagePercent)}"
         DEBUG("净利润复合增长速度:#{JSON.stringify(averagePercent)}")
         return averagePercent
 
@@ -131,14 +131,14 @@ class GameLogic
             break if index is allNetAssets.length - 1
             roe = data[retainedProfitsRowNum][index + 1] / ((@_getValidNumber(netAsset) + @_getValidNumber(allNetAssets[index + 1])) / 2) * 100
             totalRoe += roe
-            g_log_table.push "roe:#{roe.toFixed(2)}\n"
+            g_log_table.push "roe:#{roe.toFixed(2)}"
             DEBUG("roe:#{roe.toFixed(2)}")
         if allNetAssets.length is 1
-            g_log_table.push "averageRoe :#{totalRoe.toFixed(2)}\n"
+            g_log_table.push "averageRoe :#{totalRoe.toFixed(2)}"
             DEBUG("averageRoe :#{totalRoe.toFixed(2)}")
             return totalRoe
         averageRoe = totalRoe / (allNetAssets.length - 1)
-        g_log_table.push "averageRoe :#{averageRoe.toFixed(2)}\n"
+        g_log_table.push "averageRoe :#{averageRoe.toFixed(2)}"
         DEBUG("averageRoe :#{averageRoe.toFixed(2)}")
         return averageRoe
 
