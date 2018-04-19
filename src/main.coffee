@@ -1,6 +1,6 @@
 cc.game.onStart = ()->
     cc.view.adjustViewPort(true);
-    cc.view.setDesignResolutionSize(640, 1136, cc.ResolutionPolicy.SHOW_ALL)
+    cc.view.setDesignResolutionSize(1136, 640, cc.ResolutionPolicy.SHOW_ALL)
     cc.view.resizeWithBrowserSize(true)
     cc.BuilderReader.setResourcePath("res/");
 
