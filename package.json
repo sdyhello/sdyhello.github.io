@@ -5,8 +5,9 @@
 	"dependencies": {
 		"browserify": "^11.1.0",
 		"coffeeify": "^1.0.0",
-	    "coffee-script": "^1.9.1",
-	    "gulp": "^3.8.11",
-	    "gulp-run": "^1.6.8"
+		"coffee-script": "^1.9.1",
+		"gulp": "^3.8.11",
+		"gulp-run": "^1.6.8",
+		"yargs": "^3.24.0"
 	}
 }

@@ -1,16 +1,15 @@
 eventManager = require '../event/ArkEventManager.coffee'
 eventNames = require '../event/ArkEventNames.coffee'
 class ArkMainDialog
-    onClose: ->
-        seq = []
+    onDidLoadFromCCB: ->
+        textFieldLabel1 = new ccui.TextField("0000.00", 25)
+        @rootNode.addChild(textFieldLabel1)
+        textFieldLabel1.setPosition(@ccb_textField_1.getPosition())
 
-        actionBy = cc.moveBy(1, cc.p(0, 200));
-        actionByBack = actionBy.reverse();
-
-        seq.push actionBy
-        seq.push actionByBack
-
-        @m_title.runAction(cc.sequence(seq))
+        textFieldLabel2 = new ccui.TextField("0000.00", 25)
+        @rootNode.addChild(textFieldLabel2)
+        textFieldLabel2.setPosition(@ccb_textField_2.getPosition())
+        return
 
     cc.BuilderReader.registerController(
         "ArkMainDialog"
