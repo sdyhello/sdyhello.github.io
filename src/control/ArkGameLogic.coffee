@@ -80,13 +80,16 @@ class GameLogic
 
     _calcScore : (data, type, typeStr, totalAssetsIndex)->
         typeNum = @_getTypeRowNum(data, typeStr)
-        g_log_table.push "#{data[typeNum][0]}, #{@_getShowNumber(@_getValidNumber(data[typeNum][1]))}"
         totalPercent = 0
+        infoTable = []
+        infoTable.push data[typeNum][0]
         for yearIndex in [1..g_statisticsYears]
             break unless data[typeNum][yearIndex]?
+            infoTable.push @_getShowNumber(@_getValidNumber(data[typeNum][yearIndex]))
             totalPercent += @_getValidNumber(data[typeNum][yearIndex]) / @_getValidNumber(data[totalAssetsIndex][yearIndex]) * 100
         averagePercent = totalPercent / g_statisticsYears
         score = @_getScore(type, averagePercent)
+        g_log_table.push "#{infoTable}"
         g_log_table.push "#{needCalcItem[type]} 比例:#{averagePercent.toFixed(2)}%, 分数 :#{score.toFixed(2)}"
         return score
 

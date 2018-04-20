@@ -40,8 +40,6 @@ class ArkMainDialog
 
     showResult: (result)->
         @ccb_result.setString(result)
-        contentSize = @ccb_result.getContentSize()
-        @ccb_result_bg.setContentSize(cc.size(contentSize.width + 50, contentSize.height + 100))
 
     onCalc: ->
         stockCode = @_stockCodeEditBox.getString()
