@@ -4,52 +4,47 @@ eventNames      = require '../event/ArkEventNames.coffee'
 UserData        = require '../model/ArkUserData.coffee'
 
 g_statisticsYears = 5 #运行时重新计算
-maxStatisticsYears = 6
-needShowLog = "need"
+g_maxStatisticsYears = 6
 
 needCalcItem = {
-    "totalAssets",
-    "receivables",
-    "retainedProfits",
-    "depositReceived",
-    "shortLoan",
-    "longLoan"
+    "receivables": "应收账款(元)", #6
+    "depositReceived" : "预收账款(元)",#7
+    "shortLoan" : "短期借款(元)", #8
+    "longLoan" : "长期借款(元)" #9
 }
+
+ARK_RETAIN_PROFITS = "归属于母公司股东的综合收益总额(元)"  #5
+ARK_NET_ASSETS 	= "归属于母公司股东权益合计(元)"	#10
+ARK_ROE = "净资产收益率"
+ARK_RETAIN_PROFITS_ADD_RATE = "净利润同比增长率"
 
 g_log_table = []
 
-if needShowLog is "need"
-    DEBUG = console.log.bind(console)
-else
-    DEBUG = ->
 
 class GameLogic
     init: ->
         @_registerEvents()
 
-
     _registerEvents: ->
         eventManager.listen(eventNames.GAME_GET_RESULT, (obj)=>
             g_log_table = []
+            g_maxStatisticsYears = obj.years
             obj.callback?(@_getResult(obj.data))
         )
 
     _getResult: (data)->
         totalScore = 0
-        totalAssetsIndex = @_getTypeRowNum(data, needCalcItem.totalAssets)
+        totalAssetsIndex = @_getTypeRowNum(data, ARK_NET_ASSETS)
         g_statisticsYears = @_getStatisticsYears(data, totalAssetsIndex)
-        g_log_table.push "totalAssetsIndex #{totalAssetsIndex}, statisticsYears:#{g_statisticsYears}"
-        DEBUG("totalAssetsIndex #{totalAssetsIndex}, statisticsYears:#{g_statisticsYears}")
+        g_log_table.push "总资产 #{@_getShowNumber(data[totalAssetsIndex][1])}, 统计时间:#{g_statisticsYears}年"
         for own calcItem, value of needCalcItem
-            continue if value in ["totalAssets", "retainedProfits"]
             totalScore += @_calcScore(data, calcItem, value, totalAssetsIndex)
 
         totalScore += @_getRetainedProfitsScore(data)
         totalScore += @_getRoeScore(data)
         totalScore = Math.ceil(totalScore)
-        g_log_table.push "totalScore: #{totalScore}"
-        console.log("totalScore: #{totalScore}")
-        return JSON.stringify(g_log_table)
+        g_log_table.push "总分: #{totalScore}"
+        return JSON.stringify(g_log_table, null, "\t")
 
     _getReceiveScore: (percent)->
         return -percent
@@ -85,23 +80,21 @@ class GameLogic
 
     _calcScore : (data, type, typeStr, totalAssetsIndex)->
         typeNum = @_getTypeRowNum(data, typeStr)
-        g_log_table.push "#{data[typeNum][0]}, #{data[typeNum][1]}"
-        DEBUG(data[typeNum][0], data[typeNum][1], typeNum)
+        g_log_table.push "#{data[typeNum][0]}, #{@_getShowNumber(@_getValidNumber(data[typeNum][1]))}"
         totalPercent = 0
         for yearIndex in [1..g_statisticsYears]
             break unless data[typeNum][yearIndex]?
             totalPercent += @_getValidNumber(data[typeNum][yearIndex]) / @_getValidNumber(data[totalAssetsIndex][yearIndex]) * 100
         averagePercent = totalPercent / g_statisticsYears
         score = @_getScore(type, averagePercent)
-        g_log_table.push "#{needCalcItem[type]} percent:#{averagePercent.toFixed(2)}%, score :#{score.toFixed(2)}"
-        DEBUG("#{needCalcItem[type]} percent:#{averagePercent.toFixed(2)}%, score :#{score.toFixed(2)}")
+        g_log_table.push "#{needCalcItem[type]} 比例:#{averagePercent.toFixed(2)}%, 分数 :#{score.toFixed(2)}"
         return score
 
     _getStatisticsYears : (data, totalAssetsIndex)->
         totalAssets = data[totalAssetsIndex].filter((a)-> a > 0)
         length = 0
-        if totalAssets.length > maxStatisticsYears
-            length = maxStatisticsYears
+        if totalAssets.length > g_maxStatisticsYears
+            length = g_maxStatisticsYears
         else
             length = totalAssets.length
         return length
@@ -109,37 +102,44 @@ class GameLogic
     _getTableByName: (data, name)->
         rowNum = @_getTypeRowNum(data, name)
         table = data[rowNum].filter((a)-> a > 0)
-        table.slice(0, maxStatisticsYears)
+        table.slice(0, g_maxStatisticsYears)
 
     #计算N年净利润复合增长速度得分
     _getRetainedProfitsScore:  (data)->
-        allRetainedProfits = @_getTableByName(data, needCalcItem.retainedProfits)
-        g_log_table.push "初始净利润：#{allRetainedProfits[allRetainedProfits.length - 1]}, 当前净利润:#{allRetainedProfits[0]}"
-        DEBUG("初始净利润：#{allRetainedProfits[allRetainedProfits.length - 1]}, 当前净利润:#{allRetainedProfits[0]}")
+        @_getRetainedProfitsAddRate(data)
+        allRetainedProfits = @_getTableByName(data, ARK_RETAIN_PROFITS)
+        g_log_table.push "初始净利润：#{@_getShowNumber(allRetainedProfits[allRetainedProfits.length - 1])},当前净利润:#{@_getShowNumber(allRetainedProfits[0])}"
         addRetainedProfits = allRetainedProfits[0] / allRetainedProfits[allRetainedProfits.length - 1]
         averagePercent = (@_getCompoundRate(addRetainedProfits, g_statisticsYears) - 1) * 100
-        g_log_table.push "净利润复合增长速度:#{JSON.stringify(averagePercent)}"
-        DEBUG("净利润复合增长速度:#{JSON.stringify(averagePercent)}")
+        g_log_table.push "#{g_statisticsYears}年,净利润复合增长速度:#{averagePercent.toFixed(2)}%"
         return averagePercent
+
+    _getRetainedProfitsAddRate:(data) ->
+        rowNum = @_getTypeRowNum(data, ARK_RETAIN_PROFITS_ADD_RATE)
+        rateAddTable = []
+        for rateIndex in [1..g_statisticsYears]
+            rateAddTable.push data[rowNum][rateIndex]
+        g_log_table.push "#{ARK_RETAIN_PROFITS_ADD_RATE}:#{rateAddTable}"
 
     #计算ROE得分
     _getRoeScore : (data)->
-        retainedProfitsRowNum = @_getTypeRowNum(data, needCalcItem.retainedProfits)
-        allNetAssets = @_getTableByName(data, needCalcItem.totalAssets)
+        roeRowNum = @_getTypeRowNum(data, ARK_ROE)
         totalRoe = 0
-        for netAsset, index in allNetAssets
-            break if index is allNetAssets.length - 1
-            roe = data[retainedProfitsRowNum][index + 1] / ((@_getValidNumber(netAsset) + @_getValidNumber(allNetAssets[index + 1])) / 2) * 100
+        count = 0
+        roeTable = []
+        for roeValue in [1..g_statisticsYears]
+            continue if typeof(data[roeRowNum][roeValue]) isnt "string"
+            roe = data[roeRowNum][roeValue]
+            roeTable.push roe
+            roe = Number(roe.replace("%", ""))
             totalRoe += roe
-            g_log_table.push "roe:#{roe.toFixed(2)}"
-            DEBUG("roe:#{roe.toFixed(2)}")
-        if allNetAssets.length is 1
-            g_log_table.push "averageRoe :#{totalRoe.toFixed(2)}"
-            DEBUG("averageRoe :#{totalRoe.toFixed(2)}")
-            return totalRoe
-        averageRoe = totalRoe / (allNetAssets.length - 1)
-        g_log_table.push "averageRoe :#{averageRoe.toFixed(2)}"
-        DEBUG("averageRoe :#{averageRoe.toFixed(2)}")
+            count++
+        g_log_table.push "ROE:#{roeTable}"
+        averageRoe = totalRoe / count
+        g_log_table.push "平均ROE:#{averageRoe.toFixed(2)}"
         return averageRoe
+
+    _getShowNumber : (number)->
+        return "#{(number / 100000000).toFixed(2)} 亿"
 
 module.exports = GameLogic

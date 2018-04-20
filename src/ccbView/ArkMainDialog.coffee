@@ -10,46 +10,22 @@ TAG_LONG_LOAN = "longLoan"
 
 class ArkMainDialog
     onDidLoadFromCCB: ->
-        @_editBoxTable = {}
         @_datTable = []
         @init()
 
     init: ->
-        for index in [1..6]
-            continue unless @["ccb_textField_#{index}"]?
-            console.log("ccb_textField_#{index}")
-            editBox = @_createEditBox(@["ccb_textField_#{index}"])
-            @rootNode.addChild(editBox)
-            @_editBoxTable[@_getEditBoxName(index)] = editBox
+        @_stockCodeEditBox = @_createEditBox(@ccb_textField_1)
+        @rootNode.addChild(@_stockCodeEditBox)
 
-        @_initTestData()
+        @_yearsEditBox = @_createEditBox(@ccb_textField_2)
+        @rootNode.addChild(@_yearsEditBox)
 
+        @_initData()
         return
 
-    _initTestData: ->
-        testData = ["132675000000", "1432734000", "407706000000", "27890483300", "16108858700", "96029044700"]
-        index = 0
-        for own key, value of @_editBoxTable
-            console.log(value, testData[index])
-            value.setString(testData[index])
-            index++
-
-    _getEditBoxName: (index)->
-        tag = ""
-        switch index
-            when 1
-                tag = TAG_ASSETS
-            when 2
-                tag = TAG_RECEIVABLE
-            when 3
-                tag = TAG_DEPOSIT
-            when 4
-                tag = TAG_RETAINED_PROFITS
-            when 5
-                tag = TAG_SHORT_LOAN
-            when 6
-                tag = TAG_LONG_LOAN
-        return tag
+    _initData: ->
+        @_stockCodeEditBox.setString("000001")
+        @_yearsEditBox.setString("6")
 
     _createEditBox: (node)->
         editBox = new cc.EditBox(cc.size(200, 50))
@@ -65,29 +41,20 @@ class ArkMainDialog
     showResult: (result)->
         @ccb_result.setString(result)
         contentSize = @ccb_result.getContentSize()
-        @ccb_result_bg.setContentSize(cc.size(contentSize.width + 50, contentSize.height + 50))
+        @ccb_result_bg.setContentSize(cc.size(contentSize.width + 50, contentSize.height + 100))
 
     onCalc: ->
-        totalAssets = Number(@_editBoxTable[TAG_ASSETS].getString())
-        totalAssetsTable = [TAG_ASSETS, totalAssets]
-        receivable = Number(@_editBoxTable[TAG_RECEIVABLE].getString())
-        receivableTable = [TAG_RECEIVABLE, receivable]
-        depositReceive = Number(@_editBoxTable[TAG_DEPOSIT].getString())
-        depositReceiveTable = [TAG_DEPOSIT, depositReceive]
-        retainedProfits = Number(@_editBoxTable[TAG_RETAINED_PROFITS].getString())
-        retainedProfitsTable = [TAG_RETAINED_PROFITS, retainedProfits]
-        shortLoan = Number(@_editBoxTable[TAG_SHORT_LOAN].getString())
-        shortLoanTable = [TAG_SHORT_LOAN, shortLoan]
-        longLoan = Number(@_editBoxTable[TAG_LONG_LOAN].getString())
-        longLoanTable = [TAG_LONG_LOAN, longLoan]
+        stockCode = @_stockCodeEditBox.getString()
+        years = @_yearsEditBox.getString()
+        cc.loader.loadJson("res/300_json/#{stockCode}.json", (error, data)=>
+            @showResult("")
+            eventManager.send eventNames.GAME_GET_RESULT,
+                data: data
+                years : years
+                callback: (str)=>
+                    @showResult(str)
+        )
 
-        dataTable = [totalAssetsTable, receivableTable, depositReceiveTable, retainedProfitsTable, shortLoanTable, longLoanTable]
-
-        @showResult("")
-        eventManager.send eventNames.GAME_GET_RESULT,
-            data: dataTable
-            callback: (str)=>
-                @showResult(str)
 
     cc.BuilderReader.registerController(
         "ArkMainDialog"
