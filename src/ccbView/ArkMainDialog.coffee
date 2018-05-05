@@ -12,6 +12,7 @@ class ArkMainDialog
     onDidLoadFromCCB: ->
         @_datTable = []
         @init()
+        #cc.log("on did load from ccb")
 
     init: ->
         @_stockCodeEditBox = @_createEditBox(@ccb_textField_1)
