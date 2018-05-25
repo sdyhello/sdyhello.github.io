@@ -1,0 +1,1 @@
+global.year = 6

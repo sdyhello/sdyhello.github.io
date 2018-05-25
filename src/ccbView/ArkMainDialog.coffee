@@ -1,12 +1,7 @@
 eventManager = require '../event/ArkEventManager.coffee'
 eventNames = require '../event/ArkEventNames.coffee'
 
-TAG_ASSETS = "totalAssets"
-TAG_RECEIVABLE = "receivables"
-TAG_DEPOSIT = "depositReceived"
-TAG_RETAINED_PROFITS = "retainedProfits"
-TAG_SHORT_LOAN = "shortLoan"
-TAG_LONG_LOAN = "longLoan"
+g_click_times = 0
 
 class ArkMainDialog
     onDidLoadFromCCB: ->
