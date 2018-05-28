@@ -39,7 +39,7 @@ class GameLogic
     _registerEvents: ->
 
         eventManager.listen(eventNames.GAME_GET_RESULT, (obj)=>
-            obj.callback?(@_balanceObj["000858"].getCashValue())
+            obj.callback?(@_balanceObj["000858"].dumpPercentTable())
 #            g_log_table = []
 #            g_maxStatisticsYears = obj.years
 #            obj.callback?(@_getResult(obj.data))

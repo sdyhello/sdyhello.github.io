@@ -387,7 +387,7 @@
 								<key>type</key>
 								<string>Text</string>
 								<key>value</key>
-								<string>股票代码：</string>
+								<string></string>
 							</dict>
 						</array>
 					</dict>
@@ -655,8 +655,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>
@@ -895,7 +893,7 @@
 								<key>type</key>
 								<string>IntegerLabeled</string>
 								<key>value</key>
-								<integer>1</integer>
+								<integer>0</integer>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -914,6 +912,8 @@
 								<string></string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>

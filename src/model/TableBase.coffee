@@ -21,7 +21,7 @@ class TableBase
 			formatTable.push @_getShowNumber(number)
 		return formatTable
 
-	getYearValueIndex: ->
+	_getYearValueIndex: ->
 		indexTable = []
 		for timeStr, index in @_data["报告日期"]
 			if timeStr.indexOf("12-31") isnt -1
@@ -35,13 +35,12 @@ class TableBase
 			length = global.year
 		length
 
-	getYearValue: (data)->
-		yearIndexTable = @getYearValueIndex()
+	getValue: (data)->
+		yearIndexTable = @_getYearValueIndex()
 		valueTable = []
 		for index in yearIndexTable
 			valueTable.push data[index]
 
 		valueTable = valueTable.slice(0, @_getValueLength(valueTable.length))
-		@getFormatNumberTable(valueTable)
 
 module.exports = TableBase
