@@ -9,7 +9,11 @@ class BalanceSheet extends TableBase
 
 	getTotalAssets: -> @getValue(@_data["资产总计(万元)"])
 
+	getNetAssets: -> @getValue(@_data["归属于母公司股东权益合计(万元)"])
+
 	_getNoNeedCalcItems: -> ["资料", "报告日期"]
+
+	getReceivableValue: -> @getValue(@_data["应收账款(万元)"])
 
 	dumpPercentTable: ->
 		totalAssets = @getTotalAssets()
@@ -26,4 +30,22 @@ class BalanceSheet extends TableBase
 			assetsPercentTable.push percentTable
 		console.log(JSON.stringify(assetsPercentTable, null, "\t"))
 		return assetsPercentTable
+
+	getCurrentRatio: ->
+		currentAssetsTable = @getValue(@_data["流动资产合计(万元)"])
+		currentDebtsTable = @getValue(@_data["流动负债合计(万元)"])
+		currentRatio = []
+		for currentAssets, index in currentAssetsTable
+			currentRatio.push (currentAssets / currentDebtsTable[index]).toFixed(2)
+		currentRatio
+
+	getQuickRatio: ->
+		currentAssetsTable = @getValue(@_data["流动资产合计(万元)"])
+		currentDebtsTable = @getValue(@_data["流动负债合计(万元)"])
+		inventoryTable = @getValue(@_data["存货(万元)"])
+		quickRatio = []
+		for currentAssets, index in currentAssetsTable
+			quickRatio.push ((currentAssets - inventoryTable[index]) / currentDebtsTable[index]).toFixed(2)
+		quickRatio
+
 module.exports = BalanceSheet

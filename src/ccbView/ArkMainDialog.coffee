@@ -20,7 +20,7 @@ class ArkMainDialog
         return
 
     _initData: ->
-        @_stockCodeEditBox.setString("000001")
+        @_stockCodeEditBox.setString("000651")
         @_yearsEditBox.setString("6")
 
     _createEditBox: (node)->
@@ -40,10 +40,11 @@ class ArkMainDialog
     onCalc: ->
         stockCode = @_stockCodeEditBox.getString()
         years = @_yearsEditBox.getString()
+        global.year = years
         cc.loader.loadJson("res/300_json/#{stockCode}.json", (error, data)=>
             @showResult("")
             eventManager.send eventNames.GAME_GET_RESULT,
-                data: data
+                stockCode: stockCode
                 years : years
                 callback: (str)=>
                     @showResult(str)

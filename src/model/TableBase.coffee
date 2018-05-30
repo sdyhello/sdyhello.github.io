@@ -11,6 +11,7 @@ class TableBase
 		cc.loader.loadJson(filePath, (error, data)=>
 			@_data = data
 		)
+	getInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
 
 	_getShowNumber : (number)->
 		return "#{(number / 100000).toFixed(2)} 亿"
@@ -35,6 +36,12 @@ class TableBase
 			length = global.year
 		length
 
+	_formatToInt: (valueTable)->
+		intTable = []
+		for value in valueTable
+			intTable.push parseInt(value)
+		return intTable
+
 	getValue: (data)->
 		yearIndexTable = @_getYearValueIndex()
 		valueTable = []
@@ -42,5 +49,6 @@ class TableBase
 			valueTable.push data[index]
 
 		valueTable = valueTable.slice(0, @_getValueLength(valueTable.length))
-
+		@_formatToInt(valueTable)
+		
 module.exports = TableBase

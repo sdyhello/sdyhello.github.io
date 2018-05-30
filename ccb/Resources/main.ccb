@@ -156,6 +156,14 @@
 						<array>
 							<dict>
 								<key>name</key>
+								<string>visible</string>
+								<key>type</key>
+								<string>Check</string>
+								<key>value</key>
+								<false/>
+							</dict>
+							<dict>
+								<key>name</key>
 								<string>position</string>
 								<key>type</key>
 								<string>Position</string>
@@ -409,8 +417,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>313.44000244140625</real>
-							<real>575.60003662109375</real>
+							<real>265.44000244140625</real>
+							<real>587.60003662109375</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -533,7 +541,7 @@
 						<key>type</key>
 						<string>String</string>
 						<key>value</key>
-						<string>计算</string>
+						<string>Test</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -655,6 +663,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>
@@ -676,6 +686,14 @@
 						<integer>0</integer>
 						<key>properties</key>
 						<array>
+							<dict>
+								<key>name</key>
+								<string>visible</string>
+								<key>type</key>
+								<string>Check</string>
+								<key>value</key>
+								<false/>
+							</dict>
 							<dict>
 								<key>name</key>
 								<string>position</string>
@@ -912,8 +930,6 @@
 								<string></string>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -1240,6 +1256,14 @@
 				<integer>1</integer>
 				<key>properties</key>
 				<array>
+					<dict>
+						<key>name</key>
+						<string>visible</string>
+						<key>type</key>
+						<string>Check</string>
+						<key>value</key>
+						<false/>
+					</dict>
 					<dict>
 						<key>name</key>
 						<string>position</string>
