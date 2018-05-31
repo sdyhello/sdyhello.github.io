@@ -41,7 +41,7 @@ class TableBase
 
 	_changeToObj: ->
 		for item in @_data
-			@_dataObj[item[0]] = item.slice(1, item.length - 1)
+			@_dataObj[item[0]] = item.slice(1, item.length)
 
 	printData: ->
 		console.log(JSON.stringify @_data)
