@@ -13,6 +13,7 @@ ScrollView =
         inner.setAnchorPoint({x: 0, y: 0})
         inner.removeFromParent()
         container = scrollView.getContainer()
+        container.removeAllChildren(true)
         container.setContentSize(inner.getContentSize())
         container.addChild(inner)
 

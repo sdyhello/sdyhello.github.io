@@ -26,7 +26,7 @@ class ArkMainDialog
 
         @_scrollView = ArkScrollView.createScrollView(@ccb_scrollView)
         @rootNode.addChild(@_scrollView)
-        
+
         ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         return
 
