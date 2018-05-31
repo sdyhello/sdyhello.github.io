@@ -36,7 +36,7 @@ class GameLogic
             aveRoe = utils.getAverage(roeTable)
             if aveRoe > 18
                 info = @_balanceObj[stockCode].getInfo()
-                stockInfo.push info + "\n"
+                stockInfo.push info + "#{aveRoe}" + global.year + "\n"
         return stockInfo
 
     getROE: (stockCode)->

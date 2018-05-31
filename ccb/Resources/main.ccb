@@ -663,8 +663,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>
@@ -825,8 +823,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>472.32000732421875</real>
-									<real>18.399999618530273</real>
+									<real>467.32000732421875</real>
+									<real>42.400001525878906</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -877,7 +875,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>18</real>
+									<real>25</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -901,7 +899,7 @@
 								<key>value</key>
 								<array>
 									<real>950</real>
-									<real>420</real>
+									<real>0.0</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -927,9 +925,11 @@
 								<key>type</key>
 								<string>Text</string>
 								<key>value</key>
-								<string></string>
+								<string>Your privacy is important to us at Zenjoy, which is why we make it a priority to publish our </string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -1273,6 +1273,87 @@
 						<array>
 							<real>830.40008544921875</real>
 							<real>575</real>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>anchorPoint</string>
+						<key>type</key>
+						<string>Point</string>
+						<key>value</key>
+						<array>
+							<real>0.0</real>
+							<real>0.0</real>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>scale</string>
+						<key>type</key>
+						<string>ScaleLock</string>
+						<key>value</key>
+						<array>
+							<real>1</real>
+							<real>1</real>
+							<false/>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>ignoreAnchorPointForPosition</string>
+						<key>type</key>
+						<string>Check</string>
+						<key>value</key>
+						<false/>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>baseClass</key>
+				<string>CCNode</string>
+				<key>children</key>
+				<array/>
+				<key>customClass</key>
+				<string></string>
+				<key>displayName</key>
+				<string>scrollView</string>
+				<key>memberVarAssignmentName</key>
+				<string>ccb_scrollView</string>
+				<key>memberVarAssignmentType</key>
+				<integer>1</integer>
+				<key>properties</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>visible</string>
+						<key>type</key>
+						<string>Check</string>
+						<key>value</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>position</string>
+						<key>type</key>
+						<string>Position</string>
+						<key>value</key>
+						<array>
+							<real>7.5704231262207031</real>
+							<real>19.84375</real>
+							<integer>4</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>contentSize</string>
+						<key>type</key>
+						<string>Size</string>
+						<key>value</key>
+						<array>
+							<real>950</real>
+							<real>420</real>
 							<integer>0</integer>
 						</array>
 					</dict>

@@ -1,13 +1,19 @@
 eventManager = require '../event/ArkEventManager.coffee'
 eventNames = require '../event/ArkEventNames.coffee'
+ArkScrollView = require '../tools/ScrollView.coffee'
 
 g_click_times = 0
 
 class ArkMainDialog
     onDidLoadFromCCB: ->
         @_datTable = []
+        @_reset()
         @init()
-        #cc.log("on did load from ccb")
+
+    _reset: ->
+        @_scrollView = null
+        @_stockCodeEditBox = null
+        @_yearsEditBox = null
 
     init: ->
         @_stockCodeEditBox = @_createEditBox(@ccb_textField_1)
@@ -17,7 +23,13 @@ class ArkMainDialog
         @rootNode.addChild(@_yearsEditBox)
 
         @_initData()
+
+        @_scrollView = ArkScrollView.createScrollView(@ccb_scrollView)
+        @rootNode.addChild(@_scrollView)
+        
+        ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         return
+
 
     _initData: ->
         @_stockCodeEditBox.setString("000651")
@@ -36,20 +48,18 @@ class ArkMainDialog
 
     showResult: (result)->
         @ccb_result.setString(result)
+        ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
+        ArkScrollView.scrollJumpToTop(@_scrollView)
 
     onCalc: ->
         stockCode = @_stockCodeEditBox.getString()
         years = @_yearsEditBox.getString()
         global.year = years
-        cc.loader.loadJson("res/300_json/#{stockCode}.json", (error, data)=>
-            @showResult("")
-            eventManager.send eventNames.GAME_GET_RESULT,
-                stockCode: stockCode
-                years : years
-                callback: (str)=>
-                    @showResult(str)
-        )
-
+#        @showResult("")
+        eventManager.send eventNames.GAME_GET_RESULT,
+            stockCode: stockCode
+            callback: (str)=>
+                @showResult(str)
 
     cc.BuilderReader.registerController(
         "ArkMainDialog"
