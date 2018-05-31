@@ -16,4 +16,11 @@ class ProfitStatement extends TableBase
 
 	getNetProfitTable : -> @getValue(@_data["净利润(万元)"])
 
+	getPE: ->
+		earnPerShare = @getValue(@_data["基本每股收益"], true)[0]
+		price = @getSharePrice()
+		PE = (price / earnPerShare).toFixed(2)
+		PE
+
+
 module.exports = ProfitStatement

@@ -6,12 +6,16 @@ class TableBase
 
 	getFilePath: ->
 
+	getStockCode: -> @_stockCode
+
 	_loadJson: ->
 		filePath = @getFilePath()
 		cc.loader.loadJson(filePath, (error, data)=>
 			@_data = data
 		)
-	getInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
+	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
+
+	getSharePrice: -> @_data["资料"][1]
 
 	_getShowNumber : (number)->
 		return "#{(number / 100000).toFixed(2)} 亿"
@@ -42,13 +46,15 @@ class TableBase
 			intTable.push parseInt(value)
 		return intTable
 
-	getValue: (data)->
+	getValue: (data, doNotToInt)->
 		yearIndexTable = @_getYearValueIndex()
 		valueTable = []
 		for index in yearIndexTable
 			valueTable.push data[index]
 
 		valueTable = valueTable.slice(0, @_getValueLength(valueTable.length))
-		@_formatToInt(valueTable)
+		if doNotToInt
+			return valueTable
+		return @_formatToInt(valueTable)
 		
 module.exports = TableBase

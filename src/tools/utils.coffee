@@ -8,4 +8,8 @@ utils =
             total += parseInt(value)
         ave = (total / table.length).toFixed(2)
         ave
+
+    addTab: (value)->
+        value + "\t\t"
+
 module.exports = utils

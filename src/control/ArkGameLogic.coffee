@@ -25,21 +25,53 @@ class GameLogic
     _registerEvents: ->
 
         eventManager.listen(eventNames.GAME_GET_RESULT, (obj)=>
-            obj.callback?(@filterStock())
+            obj.callback?(@findMatchConditionStock())
         )
 
-    filterStock: ->
-        stockInfo = []
+    _filterROE: (stockCode) ->
+        roeTable = @_getROE(stockCode)
+        aveRoe = utils.getAverage(roeTable)
+        if aveRoe > 18
+            return true
+        return false
+
+    _filterProfitAddRatio: (stockCode)->
+        profitAddRatio = @_profitObj[stockCode].getNetProfitAddRatio()
+        if profitAddRatio > 20
+            return true
+        return false
+
+    _filterPE: (stockCode)->
+        pe = @_profitObj[stockCode].getPE()
+        console.log(pe, typeof(pe),  pe > 0)
+        if 0 < pe < 35
+            return true
+        return false
+
+    _getStockInfo: (stockCode)->
+        baseInfo = @_profitObj[stockCode].getBaseInfo()
+        profitAddRatio = @_profitObj[stockCode].getNetProfitAddRatio()
+
+        roeTable = @_getROE(stockCode)
+        aveRoe = utils.getAverage(roeTable)
+        
+        PE  = @_profitObj[stockCode].getPE()
+        return utils.addTab(stockCode) + utils.addTab(baseInfo) +
+            utils.addTab(profitAddRatio) + utils.addTab(aveRoe) + utils.addTab("PE:#{PE}") + "\n"
+
+    findMatchConditionStock: ->
+        matchStockTable = []
         for stockCode in g_stockTable
             stockCode = stockCode.slice(2, 8)
-            roeTable = @getROE(stockCode)
-            aveRoe = utils.getAverage(roeTable)
-            if aveRoe > 18
-                info = @_balanceObj[stockCode].getInfo()
-                stockInfo.push info + "#{aveRoe}" + global.year + "\n"
-        return stockInfo
+            if @_filterROE(stockCode) and @_filterProfitAddRatio(stockCode) and @_filterPE(stockCode)
+                matchStockTable.push stockCode
 
-    getROE: (stockCode)->
+        stockInfoTable = ["股票代码 \t 基本信息 \t 利润复合增长率 \t 平均ROE \t PE  统计时间:#{global.year}, 总数:#{matchStockTable.length}\n"]
+        for stockCode in matchStockTable
+            stockInfoTable.push @_getStockInfo(stockCode)
+        return stockInfoTable
+
+    _getROE: (stockCode)->
         netAssetsTable = @_balanceObj[stockCode].getNetAssets()
         netProfitsTable = @_profitObj[stockCode].getNetProfitTable()
         roeTable = []
