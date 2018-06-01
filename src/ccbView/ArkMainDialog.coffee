@@ -32,10 +32,10 @@ class ArkMainDialog
 
     _initData: ->
         @_ccb_stockCode.setString("000651")
-        @_ccb_year.setString("6")
+        @_ccb_year.setString(global.year + "")
         @_ccb_profitAddRatio.setString("15")
-        @_ccb_roe.setString("20")
-        @_ccb_pe.setString("45")
+        @_ccb_roe.setString("15")
+        @_ccb_pe.setString("60")
 
     _createEditBox: (node)->
         editBox = new cc.EditBox(cc.size(200, 50))

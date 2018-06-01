@@ -7,7 +7,6 @@ BalanceSheet    = require '../model/BalanceSheet.coffee'
 ProfitStatement    = require '../model/ProfitStatement.coffee'
 CashFlowStatement    = require '../model/CashFlowStatement.coffee'
 
-require "../globalValue.coffee"
 utils = require '../tools/utils.coffee'
 
 class GameLogic
@@ -65,21 +64,24 @@ class GameLogic
         
         PE  = @_profitObj[stockCode].getPE()
         return utils.addTab(stockCode) + utils.addTab(baseInfo) +
-            utils.addTab(profitAddRatio) + utils.addTab(aveRoe) + utils.addTab("PE:#{PE}") + "\n"
+            utils.addTab(profitAddRatio) + utils.addTab(aveRoe) +
+            utils.addTab("PE:#{PE}") + utils.addTab(utils.getAverage(@_getNetProfitQuality(stockCode))) + "\n"
 
     findMatchConditionStock:(profitAddRatio, roe, pe) ->
         matchStockTable = []
         for stockCode in utils.getStockTable(global.dir)
             stockCode = stockCode.slice(2, 8)
-            console.log(stockCode)
-            if @_filterROE(stockCode, roe) and @_filterProfitAddRatio(stockCode,
-              profitAddRatio) and @_filterPE(stockCode,
-              pe) and @_filterAdvance(stockCode) and @_filterReceivableTurnoverDays(stockCode)
-                matchStockTable.push stockCode
+            continue unless @_filterROE(stockCode, roe)
+            continue unless @_filterProfitAddRatio(stockCode, profitAddRatio)
+            continue unless @_filterPE(stockCode, pe)
+            continue unless @_filterAdvance(stockCode)
+            continue unless @_filterReceivableTurnoverDays(stockCode)
+            continue unless @_filterNetProfitQuality(stockCode)
+            matchStockTable.push stockCode
         return @_getStockTableInfo(matchStockTable)
 
     _getStockTableInfo: (matchStockTable)->
-        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE  统计时间:#{global.year}, 总数:#{matchStockTable.length}\n"]
+        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE 现金流 \t 统计时间:#{global.year}, 总数:#{matchStockTable.length}\n"]
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
         console.log(stockInfoTable)
@@ -127,6 +129,7 @@ class GameLogic
         infoTable.push "历年ROE:   " + @_getROE(stockCode) + "\n"
         infoTable.push "平均ROE:   " + utils.getAverage(@_getROE(stockCode)) + "\n"
         infoTable.push "PE:   " + @_profitObj[stockCode].getPE() + "\n"
+        infoTable.push "现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "\n"
         console.log(infoTable)
         infoTable
 
@@ -135,8 +138,23 @@ class GameLogic
         for stockCode, index in utils.getStockTable(global.dir)
             stockCode = stockCode.slice(2, 8)
             count = @_balanceObj[stockCode].getAdvanceReceiptsAddCount()
-            if global.year - count <= 1
+            if @_balanceObj[stockCode].getExistYears() - count <= 1
                 matchStockTable.push stockCode
         return @_getStockTableInfo(matchStockTable)
+
+    _getNetProfitQuality: (stockCode)->
+        netProfitTable = @_profitObj[stockCode].getNetProfitTable()
+        workCashFlowTable = @_cashFlowObj[stockCode].getWorkCashFlow()
+        ratioTable = []
+        for netProfit , index in netProfitTable
+            ratioTable.push (workCashFlowTable[index] / netProfit).toFixed(2)
+        ratioTable
+
+    _filterNetProfitQuality: (stockCode)->
+        ratioTable = @_getNetProfitQuality(stockCode)
+        aveRatio = utils.getAverage(ratioTable)
+        if aveRatio > 0.8
+            return true
+        return false
 
 module.exports = GameLogic

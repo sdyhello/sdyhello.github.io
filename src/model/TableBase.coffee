@@ -8,6 +8,8 @@ class TableBase
 
 	getStockCode: -> @_stockCode
 
+	getExistYears: -> @_existYears
+
 	_loadJson: ->
 		filePath = @getFilePath()
 		cc.loader.loadJson(filePath, (error, data)=>
@@ -38,6 +40,7 @@ class TableBase
 			length = valueLength
 		else
 			length = global.year
+		@_existYears = length
 		length
 
 	_formatToInt: (valueTable)->
