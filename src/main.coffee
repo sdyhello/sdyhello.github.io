@@ -5,15 +5,16 @@ cc.game.onStart = ()->
     cc.view.resizeWithBrowserSize(true)
     cc.BuilderReader.setResourcePath("res/");
 
-    sceneManager = require "./tools/ArkSceneManager.coffee"
-    sceneManager.init()
+    cc.LoaderScene.preload(["res/zz1000_json/"], =>
+        sceneManager = require "./tools/ArkSceneManager.coffee"
+        sceneManager.init()
 
-    gameDialog = require './ccbView/ArkMainDialog.coffee'
-    sceneManager.addLayerToScene(gameDialog)
-
-    GameLogic = require './control/ArkGameLogic.coffee'
-    gameLogicObj = new GameLogic()
-    gameLogicObj.init()
-
+        gameDialog = require './ccbView/ArkMainDialog.coffee'
+        sceneManager.addLayerToScene(gameDialog)
+        console.log("game start")
+        GameLogic = require './control/ArkGameLogic.coffee'
+        gameLogicObj = new GameLogic()
+        gameLogicObj.init()
+    )
 
 cc.game.run()

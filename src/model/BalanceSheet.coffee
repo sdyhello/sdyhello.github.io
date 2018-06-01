@@ -9,8 +9,7 @@ class BalanceSheet extends TableBase
 
 	getTotalAssets: -> @getValue(@_data["资产总计(万元)"])
 
-	getNetAssets: ->
-		@getValue(@_data["归属于母公司股东权益合计(万元)"])
+	getNetAssets: -> @getValue(@_data["归属于母公司股东权益合计(万元)"])
 
 	_getNoNeedCalcItems: -> ["资料", "报告日期"]
 

@@ -11,8 +11,6 @@ class TableBase
 	_loadJson: ->
 		filePath = @getFilePath()
 		cc.loader.loadJson(filePath, (error, data)=>
-			global.loadNum++
-			console.log("load num:#{global.loadNum}")
 			@_data = data
 		)
 	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]

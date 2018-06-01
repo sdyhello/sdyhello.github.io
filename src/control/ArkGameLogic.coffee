@@ -42,7 +42,7 @@ class GameLogic
     _filterPE: (stockCode)->
         pe = @_profitObj[stockCode].getPE()
         console.log(pe, typeof(pe),  pe > 0)
-        if 0 < pe < 35
+        if 0 < pe < 45
             return true
         return false
 
@@ -92,7 +92,7 @@ class GameLogic
         return daysTable
 
     _initTable: ->
-        for stockCode in utils.getStockTable(g_directory)
+        for stockCode, index in utils.getStockTable(g_directory)
             stockCode = stockCode.slice(2, 8)
             @_balanceObj[stockCode] = new BalanceSheet(g_directory, stockCode)
             @_profitObj[stockCode] = new ProfitStatement(g_directory, stockCode)
