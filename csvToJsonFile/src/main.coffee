@@ -5,7 +5,7 @@ CashFlowStatement 	= require "./TableControl/CashFlowStatement.coffee"
 
 global.count = 0
 
-analysisDir = "../hs300"
+analysisDir = "../zz1000"
 
 BalanceSheetTable = []
 ProfitStatementTable = []
