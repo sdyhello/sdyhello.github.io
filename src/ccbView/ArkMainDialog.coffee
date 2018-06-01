@@ -16,11 +16,10 @@ class ArkMainDialog
         @_yearsEditBox = null
 
     init: ->
-        @_stockCodeEditBox = @_createEditBox(@ccb_textField_1)
-        @rootNode.addChild(@_stockCodeEditBox)
-
-        @_yearsEditBox = @_createEditBox(@ccb_textField_2)
-        @rootNode.addChild(@_yearsEditBox)
+        textFileNameTable = ["ccb_profitAddRatio", "ccb_roe", "ccb_pe", "ccb_year", "ccb_stockCode"]
+        for textFileName in textFileNameTable
+            @["_#{textFileName}"] = @_createEditBox(@["#{textFileName}"])
+            @rootNode.addChild(@["_#{textFileName}"])
 
         @_initData()
 
@@ -32,8 +31,11 @@ class ArkMainDialog
 
 
     _initData: ->
-        @_stockCodeEditBox.setString("000651")
-        @_yearsEditBox.setString("6")
+        @_ccb_stockCode.setString("000651")
+        @_ccb_year.setString("6")
+        @_ccb_profitAddRatio.setString("15")
+        @_ccb_roe.setString("20")
+        @_ccb_pe.setString("45")
 
     _createEditBox: (node)->
         editBox = new cc.EditBox(cc.size(200, 50))
@@ -51,11 +53,20 @@ class ArkMainDialog
         ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         ArkScrollView.scrollJumpToTop(@_scrollView)
 
-    onCalc: ->
-        stockCode = @_stockCodeEditBox.getString()
-        years = @_yearsEditBox.getString()
+    onFilter: ->
+        years = @_ccb_year.getString()
         global.year = years
-#        @showResult("")
+        eventManager.send eventNames.GAME_FILTER,
+            profitAddRatio: parseFloat(@_ccb_profitAddRatio.getString())
+            roe : parseFloat(@_ccb_roe.getString())
+            pe : parseFloat(@_ccb_pe.getString())
+            callback: (str)=>
+                @showResult(str)
+
+    onCalc: ->
+        stockCode = @_ccb_stockCode.getString()
+        years = @_ccb_year.getString()
+        global.year = years
         eventManager.send eventNames.GAME_GET_RESULT,
             stockCode: stockCode
             callback: (str)=>

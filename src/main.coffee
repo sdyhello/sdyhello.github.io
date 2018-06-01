@@ -7,7 +7,7 @@ cc.game.onStart = ()->
 
     preloadFileList = require "./preloadFileList.coffee"
 
-    cc.LoaderScene.preload(preloadFileList, =>
+    cc.LoaderScene.preload([], =>
         sceneManager = require "./tools/ArkSceneManager.coffee"
         sceneManager.init()
 

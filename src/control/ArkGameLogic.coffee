@@ -10,8 +10,6 @@ CashFlowStatement    = require '../model/CashFlowStatement.coffee'
 require "../globalValue.coffee"
 utils = require '../tools/utils.coffee'
 
-g_directory = "zz1000"
-
 class GameLogic
     init: ->
         @_balanceObj = {}
@@ -21,28 +19,40 @@ class GameLogic
         @_initTable()
 
     _registerEvents: ->
-
-        eventManager.listen(eventNames.GAME_GET_RESULT, (obj)=>
-            obj.callback?(@findMatchConditionStock())
+        eventManager.listen(eventNames.GAME_GET_RESULT, (options)=>
+            options.callback?(@getStockDetailInfo(options.stockCode))
         )
 
-    _filterROE: (stockCode) ->
+        eventManager.listen(eventNames.GAME_FILTER, (options)=>
+            profitAddRatio = options.profitAddRatio
+            roe = options.roe
+            pe = options.pe
+            options.callback?(@findMatchConditionStock(profitAddRatio, roe, pe))
+        )
+
+    _filterAdvance: (stockCode)->
+        count = @_balanceObj[stockCode].getAdvanceReceiptsAddCount()
+        if global.year - count <= 2
+            return true
+        return false
+
+    _filterROE: (stockCode, needRoe) ->
         roeTable = @_getROE(stockCode)
         aveRoe = utils.getAverage(roeTable)
-        if aveRoe > 20
+        if aveRoe > needRoe
             return true
         return false
 
-    _filterProfitAddRatio: (stockCode)->
+    _filterProfitAddRatio: (stockCode, needRatio)->
         profitAddRatio = @_profitObj[stockCode].getNetProfitAddRatio()
-        if profitAddRatio > 12
+        if profitAddRatio > needRatio
             return true
         return false
 
-    _filterPE: (stockCode)->
+    _filterPE: (stockCode, maxPe)->
         pe = @_profitObj[stockCode].getPE()
         console.log(pe, typeof(pe),  pe > 0)
-        if 0 < pe < 50
+        if 0 < pe < maxPe
             return true
         return false
 
@@ -57,18 +67,22 @@ class GameLogic
         return utils.addTab(stockCode) + utils.addTab(baseInfo) +
             utils.addTab(profitAddRatio) + utils.addTab(aveRoe) + utils.addTab("PE:#{PE}") + "\n"
 
-    findMatchConditionStock: ->
+    findMatchConditionStock:(profitAddRatio, roe, pe) ->
         matchStockTable = []
-        for stockCode in utils.getStockTable(g_directory)
+        for stockCode in utils.getStockTable(global.dir)
             stockCode = stockCode.slice(2, 8)
             console.log(stockCode)
-            if @_filterROE(stockCode) and @_filterProfitAddRatio(stockCode) and @_filterPE(stockCode)
+            if @_filterROE(stockCode, roe) and @_filterProfitAddRatio(stockCode,
+              profitAddRatio) and @_filterPE(stockCode,
+              pe) and @_filterAdvance(stockCode) and @_filterReceivableTurnoverDays(stockCode)
                 matchStockTable.push stockCode
+        return @_getStockTableInfo(matchStockTable)
 
-        stockInfoTable = ["股票代码 \t 基本信息 \t 利润复合增长率 \t 平均ROE \t PE  统计时间:#{global.year}, 总数:#{matchStockTable.length}\n"]
+    _getStockTableInfo: (matchStockTable)->
+        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE  统计时间:#{global.year}, 总数:#{matchStockTable.length}\n"]
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
-        console.log(JSON.stringify stockInfoTable)
+        console.log(stockInfoTable)
         return stockInfoTable
 
     _getROE: (stockCode)->
@@ -81,23 +95,48 @@ class GameLogic
             roeTable.push roe + "\t"
         return roeTable
 
-    getReceivableTurnoverDays: (stockCode)->
+    _filterReceivableTurnoverDays: (stockCode)->
         receivableValueTable = @_balanceObj[stockCode].getReceivableValue()
         inComeValueTable = @_profitObj[stockCode].getIncomeValue()
-        daysTable = ["应收账款周转天数" + "\t"]
-        console.log(receivableValueTable, inComeValueTable)
+        daysTable = []
         for receivableValue, index in receivableValueTable
             break if index >= receivableValueTable.length - 1
             days = 360 / inComeValueTable[index] * (receivableValue + receivableValueTable[index + 1]) / 2
-            daysTable.push days + "\t"
-        return daysTable
+            daysTable.push days
+
+        day = utils.getAverage(daysTable)
+        if day < 30
+            return true
+        return false
 
     _initTable: ->
-        for stockCode, index in utils.getStockTable(g_directory)
+        for stockCode, index in utils.getStockTable(global.dir)
             stockCode = stockCode.slice(2, 8)
-            @_balanceObj[stockCode] = new BalanceSheet(g_directory, stockCode)
-            @_profitObj[stockCode] = new ProfitStatement(g_directory, stockCode)
-            @_cashFlowObj[stockCode] = new CashFlowStatement(g_directory, stockCode)
+            @_balanceObj[stockCode] = new BalanceSheet(global.dir, stockCode)
+            @_profitObj[stockCode] = new ProfitStatement(global.dir, stockCode)
+            @_cashFlowObj[stockCode] = new CashFlowStatement(global.dir, stockCode)
         return
+
+    getStockDetailInfo: (stockCode)->
+        infoTable = []
+        unless @_profitObj[stockCode]?
+            return infoTable
+        infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo() + "\n"
+        infoTable.push "年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy() + "\n"
+        infoTable.push "净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "\n"
+        infoTable.push "历年ROE:   " + @_getROE(stockCode) + "\n"
+        infoTable.push "平均ROE:   " + utils.getAverage(@_getROE(stockCode)) + "\n"
+        infoTable.push "PE:   " + @_profitObj[stockCode].getPE() + "\n"
+        console.log(infoTable)
+        infoTable
+
+    filterAdvanceReceiptsAddStock: ->
+        matchStockTable = []
+        for stockCode, index in utils.getStockTable(global.dir)
+            stockCode = stockCode.slice(2, 8)
+            count = @_balanceObj[stockCode].getAdvanceReceiptsAddCount()
+            if global.year - count <= 1
+                matchStockTable.push stockCode
+        return @_getStockTableInfo(matchStockTable)
 
 module.exports = GameLogic

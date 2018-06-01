@@ -17,6 +17,14 @@ class ProfitStatement extends TableBase
 	getNetProfitTable : ->
 		@getValue(@_data["净利润(万元)"])
 
+	getNetProfitYoy: ->
+		profitTable = @getValue(@_data["净利润(万元)"])
+		addRatio = []
+		for profit, index in profitTable
+			break if index >= profitTable.length
+			addRatio.push ((profit - profitTable[index + 1]) / profitTable[index + 1] * 100).toFixed(2)
+		addRatio
+
 	getPE: ->
 		earnPerShare = @getValue(@_data["基本每股收益"], true)[0]
 		price = @getSharePrice()

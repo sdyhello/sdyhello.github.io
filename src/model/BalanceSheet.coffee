@@ -48,4 +48,13 @@ class BalanceSheet extends TableBase
 			quickRatio.push ((currentAssets - inventoryTable[index]) / currentDebtsTable[index]).toFixed(2)
 		quickRatio
 
+	getAdvanceReceiptsAddCount: ->
+		dataTable = @getValue(@_data["预收账款(万元)"])
+		count = 0
+		for data, index in dataTable
+			continue if index >= dataTable.length
+			if data > dataTable[index + 1]
+				count++
+		count
+
 module.exports = BalanceSheet
