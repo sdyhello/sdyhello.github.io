@@ -50,7 +50,6 @@ class GameLogic
 
     _filterPE: (stockCode, maxPe)->
         pe = @_profitObj[stockCode].getPE()
-        console.log(pe, typeof(pe),  pe > 0)
         if 0 < pe < maxPe
             return true
         return false
