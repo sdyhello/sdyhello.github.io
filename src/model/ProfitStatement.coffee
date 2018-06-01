@@ -14,7 +14,8 @@ class ProfitStatement extends TableBase
 		addRatio = ((addRatio - 1) * 100).toFixed(2)
 		addRatio
 
-	getNetProfitTable : -> @getValue(@_data["净利润(万元)"])
+	getNetProfitTable : ->
+		@getValue(@_data["净利润(万元)"])
 
 	getPE: ->
 		earnPerShare = @getValue(@_data["基本每股收益"], true)[0]
