@@ -1,6 +1,6 @@
 fs = require("fs")
 
-dir = "./zz1000/"
+dir = "./zz500/"
 
 cutFile = (filePath)->
    fileSize = 0

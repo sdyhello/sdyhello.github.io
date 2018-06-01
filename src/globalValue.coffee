@@ -1,2 +1,2 @@
 global.year = 6
-global.dir = "zz1000"
+global.dir = "zz500"

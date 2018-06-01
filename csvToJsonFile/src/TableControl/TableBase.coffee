@@ -59,6 +59,12 @@ class TableBase
 				if info[0].indexOf("" + @_stockCode) isnt -1
 					@_stockInfo = info
 					break
+		if @_dir.indexOf("zz500") isnt -1
+			infoTable = StockInfoTable.getZz500()
+			for info in infoTable
+				if info[0].indexOf("" + @_stockCode) isnt -1
+					@_stockInfo = info
+					break
 		if @_dir.indexOf("zz1000") isnt -1
 			infoTable = StockInfoTable.getZz1000()
 			for info in infoTable
