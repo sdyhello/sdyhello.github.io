@@ -7,11 +7,15 @@ cc.game.onStart = ()->
 
     require "./globalValue.coffee"
 
+    preloadFileList = require "./preloadFileList.coffee"
+
+    preloadList = []
     if global.dir is "zz1000"
-        preloadFileList = require "./preloadFileList.coffee"
-    else
-        preloadFileList = []
-    cc.LoaderScene.preload(preloadFileList, =>
+        preloadList = preloadFileList.getZz1000FileList()
+    else if global.dir is "zz500"
+        preloadList = preloadFileList.getZz500FileList()
+        
+    cc.LoaderScene.preload(preloadList, =>
         sceneManager = require "./tools/ArkSceneManager.coffee"
         sceneManager.init()
 
