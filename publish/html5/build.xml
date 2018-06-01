@@ -324,6 +324,7 @@
 
             </sources>
             <sources dir="${basedir}">
+                <file name="src/resource.js"/>
                 <file name="main.js"/>
 
             </sources>

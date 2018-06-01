@@ -29,20 +29,20 @@ class GameLogic
     _filterROE: (stockCode) ->
         roeTable = @_getROE(stockCode)
         aveRoe = utils.getAverage(roeTable)
-        if aveRoe > 18
+        if aveRoe > 20
             return true
         return false
 
     _filterProfitAddRatio: (stockCode)->
         profitAddRatio = @_profitObj[stockCode].getNetProfitAddRatio()
-        if profitAddRatio > 20
+        if profitAddRatio > 12
             return true
         return false
 
     _filterPE: (stockCode)->
         pe = @_profitObj[stockCode].getPE()
         console.log(pe, typeof(pe),  pe > 0)
-        if 0 < pe < 45
+        if 0 < pe < 50
             return true
         return false
 
@@ -68,6 +68,7 @@ class GameLogic
         stockInfoTable = ["股票代码 \t 基本信息 \t 利润复合增长率 \t 平均ROE \t PE  统计时间:#{global.year}, 总数:#{matchStockTable.length}\n"]
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
+        console.log(JSON.stringify stockInfoTable)
         return stockInfoTable
 
     _getROE: (stockCode)->

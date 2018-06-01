@@ -5,7 +5,9 @@ cc.game.onStart = ()->
     cc.view.resizeWithBrowserSize(true)
     cc.BuilderReader.setResourcePath("res/");
 
-    cc.LoaderScene.preload(["res/zz1000_json/"], =>
+    preloadFileList = require "./preloadFileList.coffee"
+
+    cc.LoaderScene.preload(preloadFileList, =>
         sceneManager = require "./tools/ArkSceneManager.coffee"
         sceneManager.init()
 
