@@ -82,7 +82,7 @@ class GameLogic
         return @_getStockTableInfo(matchStockTable)
 
     _getStockTableInfo: (matchStockTable)->
-        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE 现金流 \t  总数:#{matchStockTable.length}\n"]
+        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE \t 现金流 \t  总数:#{matchStockTable.length}\n"]
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
         console.log(stockInfoTable)
