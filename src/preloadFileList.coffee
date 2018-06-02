@@ -4506,10 +4506,10 @@ zz500FileList = [
 
 preloadFileList =
 	
-	getZz1000FileList = ->
+	getZz1000FileList: ->
 		zz1000FileList
 
-	getZz500FileList = ->
+	getZz500FileList: ->
 		zz500FileList
 
 module.exports = preloadFileList
