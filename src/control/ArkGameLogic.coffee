@@ -10,7 +10,7 @@ CashFlowStatement    = require '../model/CashFlowStatement.coffee'
 utils = require '../tools/utils.coffee'
 
 class GameLogic
-    init: ->
+    init: (@_rootNode)->
         @_balanceObj = {}
         @_profitObj = {}
         @_cashFlowObj = {}
@@ -134,12 +134,23 @@ class GameLogic
         return roeTable
 
     _initTable: (dir)->
-        for stockCode, index in utils.getStockTable(dir)
-            stockCode = stockCode.slice(2, 8)
-            @_balanceObj[stockCode] = new BalanceSheet(dir, stockCode)
-            @_profitObj[stockCode] = new ProfitStatement(dir, stockCode)
-            @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
-        return
+        totalIndex = 0
+        stockTable = utils.getStockTable(dir)
+        callback = =>
+            for index in [0...300]
+                if totalIndex >= stockTable.length
+                    @_rootNode.unschedule(callback)
+                    console.log("Arkad load over")
+                    break
+                stockCode = stockTable[totalIndex]
+                stockCode = stockCode.slice(2, 8)
+                @_balanceObj[stockCode] = new BalanceSheet(dir, stockCode)
+                @_profitObj[stockCode] = new ProfitStatement(dir, stockCode)
+                @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
+                totalIndex++
+
+        @_rootNode.schedule(callback, 3, 6)
+        callback()
 
     getStockDetailInfo: (stockCode)->
         infoTable = []

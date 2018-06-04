@@ -7,15 +7,8 @@ cc.game.onStart = ()->
 
     require "./globalValue.coffee"
 
-    preloadFileList = require "./preloadFileList.coffee"
 
-    preloadList = []
-    if global.dir is "zz1000"
-        preloadList = preloadFileList.getZz1000FileList()
-    else if global.dir is "zz500"
-        preloadList = preloadFileList.getZz500FileList()
-
-    cc.LoaderScene.preload(preloadList, =>
+    cc.LoaderScene.preload([], =>
         sceneManager = require "./tools/ArkSceneManager.coffee"
         sceneManager.init()
 
@@ -24,7 +17,7 @@ cc.game.onStart = ()->
         console.log("game start:#{global.dir}")
         GameLogic = require './control/ArkGameLogic.coffee'
         gameLogicObj = new GameLogic()
-        gameLogicObj.init()
+        gameLogicObj.init(gameDialog.controller.rootNode)
     )
 
 cc.game.run()
