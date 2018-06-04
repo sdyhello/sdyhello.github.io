@@ -107,6 +107,9 @@ class GameLogic
         matchStockTable = []
         for stockCode in utils.getStockTable(global.dir)
             stockCode = stockCode.slice(2, 8)
+            unless @_balanceObj[stockCode]?
+                console.log("loading haven't done:#{stockCode}")
+                continue
             continue unless @_filterProfitAddRatio(stockCode, profitAddRatio)
             continue unless @_filterROE(stockCode, roe)
             #continue unless @_filterPE(stockCode, pe)
@@ -137,7 +140,7 @@ class GameLogic
         totalIndex = 0
         stockTable = utils.getStockTable(dir)
         callback = =>
-            console.log("Arkad loading ")
+            console.log("Arkad loading: #{totalIndex}")
             for index in [0...100]
                 if totalIndex >= stockTable.length
                     @_rootNode.unschedule(callback)
@@ -150,7 +153,7 @@ class GameLogic
                 @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
                 totalIndex++
 
-        @_rootNode.schedule(callback, 10, 100)
+        @_rootNode.schedule(callback, 6, 10)
         callback()
 
     getStockDetailInfo: (stockCode)->

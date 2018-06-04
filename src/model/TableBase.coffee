@@ -13,7 +13,8 @@ class TableBase
 	_loadJson: ->
 		filePath = @getFilePath()
 		cc.loader.loadJson(filePath, (error, data)=>
-			console.log("load #{@_stockCode}, count :#{global.count++}, data:#{data}")
+			unless data?
+				console.log("load #{@_stockCode} failed !!")
 			@_data = data
 		)
 	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
