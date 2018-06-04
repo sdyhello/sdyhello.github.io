@@ -1,5 +1,5 @@
 TableBase 	= require "./TableBase.coffee"
-
+utils 		= require '../tools/utils.coffee'
 
 class BalanceSheet extends TableBase
 	getFilePath:->
@@ -48,13 +48,12 @@ class BalanceSheet extends TableBase
 			quickRatio.push ((currentAssets - inventoryTable[index]) / currentDebtsTable[index]).toFixed(2)
 		quickRatio
 
-	getAdvanceReceiptsAddCount: ->
-		dataTable = @getValue(@_data["预收账款(万元)"])
-		count = 0
-		for data, index in dataTable
-			continue if index >= dataTable.length
-			if data > dataTable[index + 1]
-				count++
-		count
+	getAdvanceReceiptsPercent: ->
+		advanceReceiptsTable = @getValue(@_data["预收账款(万元)"])
+		totalAssetsTable = @getTotalAssets()
+		percent = []
+		for advanceReceipt, index in advanceReceiptsTable
+			percent.push (advanceReceipt / totalAssetsTable[index]) * 100
+		utils.getAverage(percent)
 
 module.exports = BalanceSheet

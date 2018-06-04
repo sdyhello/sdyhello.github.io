@@ -26,12 +26,37 @@ class GameLogic
             profitAddRatio = options.profitAddRatio
             roe = options.roe
             pe = options.pe
-            options.callback?(@findMatchConditionStock(profitAddRatio, roe, pe))
+            advanceReceipt = options.advanceReceipt
+            receivableTurnoverDays = options.receivableTurnoverDays
+            netProfitQuality = options.netProfitQuality
+            options.callback?(@findMatchConditionStock(profitAddRatio, roe, pe, advanceReceipt,
+              receivableTurnoverDays, netProfitQuality))
         )
 
-    _filterAdvance: (stockCode)->
-        count = @_balanceObj[stockCode].getAdvanceReceiptsAddCount()
-        if global.year - count <= 2
+    _filterAdvanceReceiptsPercent:(stockCode, advanceReceipt) ->
+        percent = @_balanceObj[stockCode].getAdvanceReceiptsPercent()
+        if percent  >= advanceReceipt
+            return true
+        return false
+
+    _filterReceivableTurnoverDays: (stockCode, receivableTurnoverDays)->
+        receivableValueTable = @_balanceObj[stockCode].getReceivableValue()
+        inComeValueTable = @_profitObj[stockCode].getIncomeValue()
+        daysTable = []
+        for receivableValue, index in receivableValueTable
+            break if index >= receivableValueTable.length - 1
+            days = 360 / inComeValueTable[index] * (receivableValue + receivableValueTable[index + 1]) / 2
+            daysTable.push days
+
+        day = utils.getAverage(daysTable)
+        if day < receivableTurnoverDays
+            return true
+        return false
+
+    _filterNetProfitQuality: (stockCode, netProfitQuality)->
+        ratioTable = @_getNetProfitQuality(stockCode)
+        aveRatio = utils.getAverage(ratioTable)
+        if aveRatio > netProfitQuality
             return true
         return false
 
@@ -67,16 +92,16 @@ class GameLogic
             utils.addTab("PE:#{PE}") + utils.addTab(utils.getAverage(@_getNetProfitQuality(stockCode))) +
             utils.addTab("统计时间: " + @_balanceObj[stockCode].getExistYears()) + "\n"
 
-    findMatchConditionStock:(profitAddRatio, roe, pe) ->
+    findMatchConditionStock:(profitAddRatio, roe, pe, advanceReceipt,receivableTurnoverDays, netProfitQuality)->
         matchStockTable = []
         for stockCode in utils.getStockTable(global.dir)
             stockCode = stockCode.slice(2, 8)
-            continue unless @_filterROE(stockCode, roe)
             continue unless @_filterProfitAddRatio(stockCode, profitAddRatio)
+            continue unless @_filterROE(stockCode, roe)
             continue unless @_filterPE(stockCode, pe)
-            continue unless @_filterAdvance(stockCode)
-            continue unless @_filterReceivableTurnoverDays(stockCode)
-            continue unless @_filterNetProfitQuality(stockCode)
+            continue unless @_filterAdvanceReceiptsPercent(stockCode, advanceReceipt)
+            continue unless @_filterReceivableTurnoverDays(stockCode, receivableTurnoverDays)
+            continue unless @_filterNetProfitQuality(stockCode, netProfitQuality)
             matchStockTable.push stockCode
         return @_getStockTableInfo(matchStockTable)
 
@@ -96,20 +121,6 @@ class GameLogic
             roe = ((netProfitsTable[index] / ((netAssets + netAssetsTable[index + 1]) / 2)) * 100).toFixed(2)
             roeTable.push roe + "\t"
         return roeTable
-
-    _filterReceivableTurnoverDays: (stockCode)->
-        receivableValueTable = @_balanceObj[stockCode].getReceivableValue()
-        inComeValueTable = @_profitObj[stockCode].getIncomeValue()
-        daysTable = []
-        for receivableValue, index in receivableValueTable
-            break if index >= receivableValueTable.length - 1
-            days = 360 / inComeValueTable[index] * (receivableValue + receivableValueTable[index + 1]) / 2
-            daysTable.push days
-
-        day = utils.getAverage(daysTable)
-        if day < 30
-            return true
-        return false
 
     _initTable: ->
         for stockCode, index in utils.getStockTable(global.dir)
@@ -133,15 +144,6 @@ class GameLogic
         console.log(infoTable)
         infoTable
 
-    filterAdvanceReceiptsAddStock: ->
-        matchStockTable = []
-        for stockCode, index in utils.getStockTable(global.dir)
-            stockCode = stockCode.slice(2, 8)
-            count = @_balanceObj[stockCode].getAdvanceReceiptsAddCount()
-            if @_balanceObj[stockCode].getExistYears() - count <= 1
-                matchStockTable.push stockCode
-        return @_getStockTableInfo(matchStockTable)
-
     _getNetProfitQuality: (stockCode)->
         netProfitTable = @_profitObj[stockCode].getNetProfitTable()
         workCashFlowTable = @_cashFlowObj[stockCode].getWorkCashFlow()
@@ -150,11 +152,5 @@ class GameLogic
             ratioTable.push (workCashFlowTable[index] / netProfit).toFixed(2)
         ratioTable
 
-    _filterNetProfitQuality: (stockCode)->
-        ratioTable = @_getNetProfitQuality(stockCode)
-        aveRatio = utils.getAverage(ratioTable)
-        if aveRatio > 0.8
-            return true
-        return false
 
 module.exports = GameLogic
