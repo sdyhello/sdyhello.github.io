@@ -15,11 +15,15 @@ class GameLogic
         @_profitObj = {}
         @_cashFlowObj = {}
         @_registerEvents()
-        @_initTable()
+        @_initTable(global.dir)
 
     _registerEvents: ->
         eventManager.listen(eventNames.GAME_GET_RESULT, (options)=>
             options.callback?(@getStockDetailInfo(options.stockCode))
+        )
+
+        eventManager.listen(eventNames.GAME_LOAD_TABLE, (dir) =>
+            @_initTable(dir)
         )
 
         eventManager.listen(eventNames.GAME_FILTER, (options)=>
@@ -129,8 +133,8 @@ class GameLogic
             roeTable.push roe + "\t"
         return roeTable
 
-    _initTable: ->
-        for stockCode, index in utils.getStockTable(global.dir)
+    _initTable: (dir)->
+        for stockCode, index in utils.getStockTable(dir)
             stockCode = stockCode.slice(2, 8)
             @_balanceObj[stockCode] = new BalanceSheet(global.dir, stockCode)
             @_profitObj[stockCode] = new ProfitStatement(global.dir, stockCode)

@@ -58,6 +58,12 @@ class ArkMainDialog
         ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         ArkScrollView.scrollJumpToTop(@_scrollView)
 
+    onLoadZz500: ->
+        eventManager.send eventNames.GAME_LOAD_TABLE, "zz500"
+
+    onLoadZz1000: ->
+        eventManager.send eventNames.GAME_LOAD_TABLE, "zz1000"
+
     onFilter: ->
         years = @_ccb_year.getString()
         global.year = years

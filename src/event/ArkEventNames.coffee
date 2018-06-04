@@ -6,5 +6,6 @@ EventNames =
     GAME_GET_RESULT : "game.get.result"
     GAME_INIT_TABLE	: "game.init.table"
     GAME_FILTER     : "game.filter"
+    GAME_LOAD_TABLE : "game.load.table"
 
 module.exports = EventNames
