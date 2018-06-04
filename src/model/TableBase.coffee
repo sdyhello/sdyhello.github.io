@@ -15,6 +15,10 @@ class TableBase
 		cc.loader.loadJson(filePath, (error, data)=>
 			unless data?
 				console.log("load #{@_stockCode} failed !!")
+			global.count += 1
+			if global.count is 3
+				global.count = 0
+				global.canLoad = true
 			@_data = data
 		)
 	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]

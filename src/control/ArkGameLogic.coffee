@@ -143,19 +143,23 @@ class GameLogic
     _initTable: (dir)->
         totalIndex = 0
         stockTable = utils.getStockTable(dir)
+        beginTime = new Date()
         loadFile = =>
+            return unless global.canLoad
+            global.canLoad = false
             console.log("Arkad loading: #{totalIndex}")
-            for index in [0...300]
-                if totalIndex >= stockTable.length
-                    @_rootNode.unschedule(callback)
-                    console.log("Arkad load over")
-                    break
-                stockCode = stockTable[totalIndex]
-                stockCode = stockCode.slice(2, 8)
-                @_loadFileToObj(stockCode)
-                totalIndex++
+            if totalIndex >= stockTable.length
+                @_rootNode.unschedule(loadFile)
+                now = new Date()
+                dis = now - beginTime
+                console.log("Arkad load over:#{dis // 1000 }")
+                return
+            stockCode = stockTable[totalIndex]
+            stockCode = stockCode.slice(2, 8)
+            @_loadFileToObj(stockCode)
+            totalIndex++
 
-        @_rootNode.schedule(loadFile, 20, 15)
+        @_rootNode.schedule(loadFile)
         loadFile()
 
     getStockDetailInfo: (stockCode)->
