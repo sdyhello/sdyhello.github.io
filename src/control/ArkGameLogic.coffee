@@ -155,7 +155,7 @@ class GameLogic
                 @_loadFileToObj(stockCode)
                 totalIndex++
 
-        @_rootNode.schedule(loadFile, 20, 4)
+        @_rootNode.schedule(loadFile, 20, 15)
         loadFile()
 
     getStockDetailInfo: (stockCode)->

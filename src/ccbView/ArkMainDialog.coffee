@@ -16,22 +16,24 @@ class ArkMainDialog
         @_yearsEditBox = null
 
     init: ->
+        @_initEditBoxNode()
+        @_initScrollView()
+
+
+    _initScrollView: ->
+        @_scrollView = ArkScrollView.createScrollView(@ccb_scrollView)
+        @rootNode.addChild(@_scrollView)
+        ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
+
+    _initEditBoxNode: ->
         textFileNameTable = ["ccb_profitAddRatio", "ccb_roe", "ccb_pe", "ccb_year", "ccb_stockCode",
             "ccb_advanceReceipts", "ccb_receivableTurnoverDays", "ccb_netProfitQuality"]
         for textFileName in textFileNameTable
             @["_#{textFileName}"] = @_createEditBox(@["#{textFileName}"])
             @rootNode.addChild(@["_#{textFileName}"])
+        @_initEditBoxData()
 
-        @_initData()
-
-        @_scrollView = ArkScrollView.createScrollView(@ccb_scrollView)
-        @rootNode.addChild(@_scrollView)
-
-        ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
-        return
-
-
-    _initData: ->
+    _initEditBoxData: ->
         @_ccb_stockCode.setString("600519")
         @_ccb_year.setString(global.year + "")
         @_ccb_profitAddRatio.setString("12")
