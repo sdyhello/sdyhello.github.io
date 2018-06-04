@@ -22,10 +22,6 @@ class GameLogic
             options.callback?(@getStockDetailInfo(options.stockCode))
         )
 
-        eventManager.listen(eventNames.GAME_LOAD_TABLE, (dir) =>
-            @_initTable(dir)
-        )
-
         eventManager.listen(eventNames.GAME_FILTER, (options)=>
             profitAddRatio = options.profitAddRatio
             roe = options.roe
@@ -139,10 +135,15 @@ class GameLogic
             roeTable.push roe + "\t"
         return roeTable
 
+    _loadFileToObj: (stockCode)->
+        @_balanceObj[stockCode] = new BalanceSheet(dir, stockCode)
+        @_profitObj[stockCode] = new ProfitStatement(dir, stockCode)
+        @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
+
     _initTable: (dir)->
         totalIndex = 0
         stockTable = utils.getStockTable(dir)
-        callback = =>
+        loadFile = =>
             console.log("Arkad loading: #{totalIndex}")
             for index in [0...300]
                 if totalIndex >= stockTable.length
@@ -151,18 +152,17 @@ class GameLogic
                     break
                 stockCode = stockTable[totalIndex]
                 stockCode = stockCode.slice(2, 8)
-                @_balanceObj[stockCode] = new BalanceSheet(dir, stockCode)
-                @_profitObj[stockCode] = new ProfitStatement(dir, stockCode)
-                @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
+                @_loadFileToObj(stockCode)
                 totalIndex++
 
-        @_rootNode.schedule(callback, 20, 4)
-        callback()
+        @_rootNode.schedule(loadFile, 20, 4)
+        loadFile()
 
     getStockDetailInfo: (stockCode)->
         infoTable = []
         unless @_profitObj[stockCode]?
-            return "stock haven't loading or isn't exist!"
+            @_loadFileToObj(stockCode)
+            return "loadFile ok, try again!"
         infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo() + "\n"
         infoTable.push "年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy() + "\n"
         infoTable.push "净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "\n"
