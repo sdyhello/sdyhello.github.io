@@ -66,6 +66,7 @@ class ArkMainDialog
 
     onFilter: ->
         years = @_ccb_year.getString()
+        TDGA.onEvent("onFilter")
         global.year = years
         eventManager.send eventNames.GAME_FILTER,
             profitAddRatio          : parseFloat(@_ccb_profitAddRatio.getString())
@@ -80,6 +81,7 @@ class ArkMainDialog
     onCalc: ->
         stockCode = @_ccb_stockCode.getString()
         years = @_ccb_year.getString()
+        TDGA.onEvent("onCalc", {stockCode, years})
         global.year = years
         eventManager.send eventNames.GAME_GET_RESULT,
             stockCode: stockCode
