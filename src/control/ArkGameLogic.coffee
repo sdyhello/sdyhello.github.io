@@ -136,9 +136,9 @@ class GameLogic
     _initTable: (dir)->
         for stockCode, index in utils.getStockTable(dir)
             stockCode = stockCode.slice(2, 8)
-            @_balanceObj[stockCode] = new BalanceSheet(global.dir, stockCode)
-            @_profitObj[stockCode] = new ProfitStatement(global.dir, stockCode)
-            @_cashFlowObj[stockCode] = new CashFlowStatement(global.dir, stockCode)
+            @_balanceObj[stockCode] = new BalanceSheet(dir, stockCode)
+            @_profitObj[stockCode] = new ProfitStatement(dir, stockCode)
+            @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
         return
 
     getStockDetailInfo: (stockCode)->
