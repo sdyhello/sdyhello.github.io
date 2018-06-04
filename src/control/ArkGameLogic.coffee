@@ -101,7 +101,10 @@ class GameLogic
         return utils.addTab(stockCode) + utils.addTab(baseInfo) +
             utils.addTab(profitAddRatio) + utils.addTab(aveRoe) +
             utils.addTab("PE:#{PE}") + utils.addTab(utils.getAverage(@_getNetProfitQuality(stockCode))) +
-            utils.addTab("统计时间: " + @_balanceObj[stockCode].getExistYears()) + "\n"
+            utils.addTab("应:#{@_getReceivableTurnOverDays(stockCode)}") +
+            utils.addTab("预:#{@_getAdvanceReceiptsPercent(stockCode)}") +
+            utils.addTab("统计时间: " + @_balanceObj[stockCode].getExistYears()) +
+            "\n"
 
     findMatchConditionStock:(profitAddRatio, roe, pe, advanceReceipt,receivableTurnoverDays, netProfitQuality)->
         matchStockTable = []
@@ -120,7 +123,7 @@ class GameLogic
         return @_getStockTableInfo(matchStockTable)
 
     _getStockTableInfo: (matchStockTable)->
-        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE \t 现金流 \t  总数:#{matchStockTable.length}\n"]
+        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE \t 应收 \t 预收 \t 现金流 \t  总数:#{matchStockTable.length}\n"]
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
         console.log(stockInfoTable)
@@ -153,13 +156,13 @@ class GameLogic
                 @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
                 totalIndex++
 
-        @_rootNode.schedule(callback, 8, 4)
+        @_rootNode.schedule(callback, 20, 4)
         callback()
 
     getStockDetailInfo: (stockCode)->
         infoTable = []
         unless @_profitObj[stockCode]?
-            return infoTable
+            return "stock haven't loading or isn't exist!"
         infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo() + "\n"
         infoTable.push "年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy() + "\n"
         infoTable.push "净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "\n"

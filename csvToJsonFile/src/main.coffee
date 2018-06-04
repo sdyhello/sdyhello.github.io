@@ -3,8 +3,6 @@ BalanceSheet 		= require "./TableControl/BalanceSheet.coffee"
 ProfitStatement 	= require "./TableControl/ProfitStatement.coffee"
 CashFlowStatement 	= require "./TableControl/CashFlowStatement.coffee"
 
-global.count = 0
-
 analysisDir = "../zz500"
 
 BalanceSheetTable = []
