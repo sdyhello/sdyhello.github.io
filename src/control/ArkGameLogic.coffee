@@ -137,7 +137,7 @@ class GameLogic
         totalIndex = 0
         stockTable = utils.getStockTable(dir)
         callback = =>
-            for index in [0...300]
+            for index in [0...100]
                 if totalIndex >= stockTable.length
                     @_rootNode.unschedule(callback)
                     console.log("Arkad load over")
@@ -149,7 +149,7 @@ class GameLogic
                 @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
                 totalIndex++
 
-        @_rootNode.schedule(callback, 3, 6)
+        @_rootNode.schedule(callback, 10, 10)
         callback()
 
     getStockDetailInfo: (stockCode)->
