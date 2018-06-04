@@ -32,13 +32,13 @@ class ArkMainDialog
 
 
     _initData: ->
-        @_ccb_stockCode.setString("000651")
+        @_ccb_stockCode.setString("600519")
         @_ccb_year.setString(global.year + "")
-        @_ccb_profitAddRatio.setString("15")
+        @_ccb_profitAddRatio.setString("12")
         @_ccb_roe.setString("15")
         @_ccb_pe.setString("60")
-        @_ccb_advanceReceipts.setString("10")
-        @_ccb_receivableTurnoverDays.setString("10")
+        @_ccb_advanceReceipts.setString("5")
+        @_ccb_receivableTurnoverDays.setString("30")
         @_ccb_netProfitQuality.setString("0.8")
 
     _createEditBox: (node)->

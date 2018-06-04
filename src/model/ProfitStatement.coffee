@@ -21,7 +21,7 @@ class ProfitStatement extends TableBase
 		profitTable = @getValue(@_data["净利润(万元)"])
 		addRatio = []
 		for profit, index in profitTable
-			break if index >= profitTable.length
+			break if index >= profitTable.length - 1
 			addRatio.push ((profit - profitTable[index + 1]) / profitTable[index + 1] * 100).toFixed(2)
 		addRatio
 

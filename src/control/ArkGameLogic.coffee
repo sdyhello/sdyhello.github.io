@@ -34,12 +34,21 @@ class GameLogic
         )
 
     _filterAdvanceReceiptsPercent:(stockCode, advanceReceipt) ->
-        percent = @_balanceObj[stockCode].getAdvanceReceiptsPercent()
+        percent = @_getAdvanceReceiptsPercent(stockCode)
         if percent  >= advanceReceipt
             return true
         return false
 
+    _getAdvanceReceiptsPercent: (stockCode)->
+        return @_balanceObj[stockCode].getAdvanceReceiptsPercent()
+
     _filterReceivableTurnoverDays: (stockCode, receivableTurnoverDays)->
+        day = @_getReceivableTurnOverDays(stockCode)
+        if day < receivableTurnoverDays
+            return true
+        return false
+
+    _getReceivableTurnOverDays: (stockCode)->
         receivableValueTable = @_balanceObj[stockCode].getReceivableValue()
         inComeValueTable = @_profitObj[stockCode].getIncomeValue()
         daysTable = []
@@ -49,9 +58,7 @@ class GameLogic
             daysTable.push days
 
         day = utils.getAverage(daysTable)
-        if day < receivableTurnoverDays
-            return true
-        return false
+        return day
 
     _filterNetProfitQuality: (stockCode, netProfitQuality)->
         ratioTable = @_getNetProfitQuality(stockCode)
@@ -98,7 +105,7 @@ class GameLogic
             stockCode = stockCode.slice(2, 8)
             continue unless @_filterProfitAddRatio(stockCode, profitAddRatio)
             continue unless @_filterROE(stockCode, roe)
-            continue unless @_filterPE(stockCode, pe)
+            #continue unless @_filterPE(stockCode, pe)
             continue unless @_filterAdvanceReceiptsPercent(stockCode, advanceReceipt)
             continue unless @_filterReceivableTurnoverDays(stockCode, receivableTurnoverDays)
             continue unless @_filterNetProfitQuality(stockCode, netProfitQuality)
@@ -137,10 +144,11 @@ class GameLogic
         infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo() + "\n"
         infoTable.push "年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy() + "\n"
         infoTable.push "净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "\n"
-        infoTable.push "历年ROE:   " + @_getROE(stockCode) + "\n"
-        infoTable.push "平均ROE:   " + utils.getAverage(@_getROE(stockCode)) + "\n"
+        infoTable.push "历年ROE:   " + @_getROE(stockCode) + "平均: #{utils.getAverage(@_getROE(stockCode))}" + "\n"
         infoTable.push "PE:   " + @_profitObj[stockCode].getPE() + "\n"
-        infoTable.push "现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "\n"
+        infoTable.push "现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))} " + "\n"
+        infoTable.push "应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)} \n"
+        infoTable.push "预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}"
         console.log(infoTable)
         infoTable
 
