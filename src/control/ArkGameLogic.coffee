@@ -10,7 +10,7 @@ CashFlowStatement    = require '../model/CashFlowStatement.coffee'
 utils = require '../tools/utils.coffee'
 
 class GameLogic
-    init: (@_rootNode)->
+    init: (@_dialog)->
         @_balanceObj = {}
         @_profitObj = {}
         @_cashFlowObj = {}
@@ -147,19 +147,19 @@ class GameLogic
         loadFile = =>
             return unless global.canLoad
             global.canLoad = false
-            console.log("Arkad loading: #{totalIndex}")
             if totalIndex >= stockTable.length
-                @_rootNode.unschedule(loadFile)
+                @_dialog.controller.rootNode.unschedule(loadFile)
                 now = new Date()
                 dis = now - beginTime
-                console.log("Arkad load over:#{dis // 1000 }")
+                @_dialog.controller.ccb_loading_label.setString("load over: use time #{dis // 1000 }s")
                 return
             stockCode = stockTable[totalIndex]
             stockCode = stockCode.slice(2, 8)
+            @_dialog.controller.ccb_loading_label.setString("loading ...#{stockCode}... #{totalIndex}/#{stockTable.length}")
             @_loadFileToObj(stockCode)
             totalIndex++
 
-        @_rootNode.schedule(loadFile)
+        @_dialog.controller.rootNode.schedule(loadFile)
         loadFile()
 
     getStockDetailInfo: (stockCode)->

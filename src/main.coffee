@@ -17,7 +17,7 @@ cc.game.onStart = ()->
         console.log("game start:#{global.dir}")
         GameLogic = require './control/ArkGameLogic.coffee'
         gameLogicObj = new GameLogic()
-        gameLogicObj.init(gameDialog.controller.rootNode)
+        gameLogicObj.init(gameDialog)
     )
 
 cc.game.run()
