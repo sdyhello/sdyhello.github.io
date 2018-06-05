@@ -1,7 +1,7 @@
 
 class TableBase
 	constructor: (@_stockCode)->
-		@_data = []
+		@_data = null
 		@_loadJson()
 
 	getFilePath: ->
@@ -9,6 +9,8 @@ class TableBase
 	getStockCode: -> @_stockCode
 
 	getExistYears: -> @_existYears
+
+	isLoadFinish: -> @_data?
 
 	_loadJson: ->
 		filePath = @getFilePath()

@@ -120,11 +120,17 @@ class GameLogic
             utils.addTab("统计时间: " + @_balanceObj[stockCode].getExistYears()) +
             "\n"
 
+    _isAllTableLoadFinish: (stockCode)->
+        balance = @_balanceObj[stockCode]?.isLoadFinish()
+        profit = @_profitObj[stockCode]?.isLoadFinish()
+        cashFlow = @_cashFlowObj[stockCode]?.isLoadFinish()
+        return balance and profit and cashFlow
+
     findMatchConditionStock:(profitAddRatio, roe, pe, advanceReceipt,receivableTurnoverDays, netProfitQuality)->
         matchStockTable = []
         for stockCode in utils.getStockTable("allA")
             stockCode = stockCode.slice(2, 8)
-            continue unless @_balanceObj[stockCode]?
+            continue unless @_isAllTableLoadFinish(stockCode)
             continue unless @_filterProfitAddRatio(stockCode, profitAddRatio)
             continue unless @_filterROE(stockCode, roe)
             continue unless @_filterPE(stockCode, pe)
@@ -179,7 +185,7 @@ class GameLogic
             if isExist
                 stockCode = stockCode.slice(2, 8)
                 @_dialog.controller.ccb_loading_label.setString("loading ...#{stockCode}... #{totalIndex}/#{stockTable.length}")
-                if @_balanceObj[stockCode]?
+                if @_balanceObj[stockCode]?.isLoadFinish()
                     global.canLoad = true
                 else
                     @_loadFileToObj(stockCode)
