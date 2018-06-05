@@ -44,7 +44,7 @@ class ArkMainDialog
         @_ccb_netProfitQuality.setString("0.8")
 
     _createEditBox: (node)->
-        editBox = new cc.EditBox(cc.size(100, 50))
+        editBox = new cc.EditBox(cc.size(100, 50), new cc.Scale9Sprite("res/ccbResources/9_back.png"))
         editBox.setAnchorPoint(cc.p(0, 0.5))
         editBox.setPosition(node.getPosition())
         editBox.setInputMode(cc.EDITBOX_INPUT_MODE_SINGLELINE)
@@ -56,13 +56,13 @@ class ArkMainDialog
         return editBox
 
     showResult: (result)->
-        @ccb_result.setString(result)
+        @ccb_result.setString(result.toString())
         ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         ArkScrollView.scrollJumpToTop(@_scrollView)
 
     onFilter: ->
         years = @_ccb_year.getString()
-        TDGA.onEvent("onFilter")
+        TDGA?.onEvent("onFilter")
         global.year = years
         eventManager.send eventNames.GAME_FILTER,
             profitAddRatio          : parseFloat(@_ccb_profitAddRatio.getString())
@@ -77,7 +77,7 @@ class ArkMainDialog
     onCalc: ->
         stockCode = @_ccb_stockCode.getString()
         years = @_ccb_year.getString()
-        TDGA.onEvent("onCalc", {stockCode, years})
+        TDGA?.onEvent("onCalc", {stockCode, years})
         global.year = years
         eventManager.send eventNames.GAME_GET_RESULT,
             stockCode: stockCode
