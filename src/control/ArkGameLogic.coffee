@@ -156,6 +156,9 @@ class GameLogic
         @_profitObj[stockCode] = new ProfitStatement(stockCode)
         @_cashFlowObj[stockCode] = new CashFlowStatement(stockCode)
 
+    _checkStockExist: (stockCode)->
+        return stockCode in utils.getStockTable("allA")
+
     _loadTable: (dir)->
         totalIndex = 0
         stockTable = utils.getStockTable(dir)
@@ -172,12 +175,16 @@ class GameLogic
                 @_loadingFileStatus = false
                 return
             stockCode = stockTable[totalIndex]
-            stockCode = stockCode.slice(2, 8)
-            @_dialog.controller.ccb_loading_label.setString("loading ...#{stockCode}... #{totalIndex}/#{stockTable.length}")
-            if @_balanceObj[stockCode]?
-                global.canLoad = true
+            isExist = @_checkStockExist(stockCode)
+            if isExist
+                stockCode = stockCode.slice(2, 8)
+                @_dialog.controller.ccb_loading_label.setString("loading ...#{stockCode}... #{totalIndex}/#{stockTable.length}")
+                if @_balanceObj[stockCode]?
+                    global.canLoad = true
+                else
+                    @_loadFileToObj(stockCode)
             else
-                @_loadFileToObj(stockCode)
+                global.canLoad = true
             totalIndex++
 
         @_dialog.controller.rootNode.schedule(loadFile)
