@@ -8,7 +8,7 @@ cc.game.onStart = ()->
     require "./globalValue.coffee"
 
 
-    cc.LoaderScene.preload([], =>
+    cc.LoaderScene.preload(["res/ccbResources/9_back.png"], =>
         sceneManager = require "./tools/ArkSceneManager.coffee"
         sceneManager.init()
 
