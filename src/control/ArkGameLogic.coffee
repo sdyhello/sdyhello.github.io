@@ -145,6 +145,10 @@ class GameLogic
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
         console.log(stockInfoTable)
+        length = stockInfoTable.length
+        if stockInfoTable.length > 100
+            stockInfoTable = stockInfoTable.slice(0, 100)
+            stockInfoTable.push "too many stock:#{length}"
         return stockInfoTable
 
     _getROE: (stockCode)->
