@@ -46,7 +46,7 @@ class ArkMainDialog
     _createEditBox: (node)->
         editBox = new cc.EditBox(cc.size(100, 50), new cc.Scale9Sprite("res/ccbResources/9_back.png"))
         editBox.setAnchorPoint(cc.p(0, 0.5))
-        editBox.setPosition(node.getPosition())
+        editBox.setPosition(node.convertToWorldSpace(cc.p(0, 0)))
         editBox.setInputMode(cc.EDITBOX_INPUT_MODE_SINGLELINE)
         editBox.setReturnType(cc.KEYBOARD_RETURNTYPE_DONE)
         editBox.setInputFlag(cc.EDITBOX_INPUT_FLAG_INITIAL_CAPS_SENTENCE)
@@ -78,9 +78,6 @@ class ArkMainDialog
     _loadFile: (dir)->
         TDGA?.onEvent(dir)
         eventManager.send eventNames.GAME_LOAD_TABLE, dir
-
-    onLoad300: ->
-        @_loadFile("hs300")
 
     onLoad500: ->
         @_loadFile("zz500")

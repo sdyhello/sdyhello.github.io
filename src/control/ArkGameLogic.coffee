@@ -15,6 +15,7 @@ class GameLogic
         @_profitObj = {}
         @_cashFlowObj = {}
         @_registerEvents()
+        @_loadTable("hs300")
 
     _registerEvents: ->
         eventManager.listen(eventNames.GAME_GET_RESULT, (options)=>
