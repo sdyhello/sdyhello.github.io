@@ -1,6 +1,6 @@
 
 class TableBase
-	constructor: (@_stockType, @_stockCode)->
+	constructor: (@_stockCode)->
 		@_data = []
 		@_loadJson()
 

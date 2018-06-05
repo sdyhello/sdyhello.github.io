@@ -3,7 +3,7 @@ utils 		= require '../tools/utils.coffee'
 
 class ProfitStatement extends TableBase
 	getFilePath: ->
-		"res/#{@_stockType}_json/lrb_#{@_stockCode}.json"
+		"res/allA_json/lrb_#{@_stockCode}.json"
 
 	getIncomeValue: -> @getValue(@_data["营业收入(万元)"])
 

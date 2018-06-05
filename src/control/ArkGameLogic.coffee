@@ -15,7 +15,7 @@ class GameLogic
         @_profitObj = {}
         @_cashFlowObj = {}
         @_registerEvents()
-        @_initTable(global.dir)
+        @_loadTable("hs300")
 
     _registerEvents: ->
         eventManager.listen(eventNames.GAME_GET_RESULT, (options)=>
@@ -33,7 +33,14 @@ class GameLogic
               receivableTurnoverDays, netProfitQuality))
         )
 
+        eventManager.listen(eventNames.GAME_LOAD_TABLE, (dir) =>
+            return if @_loadingFileStatus
+            global.canLoad = true
+            @_loadTable(dir)
+        )
+
     _filterAdvanceReceiptsPercent:(stockCode, advanceReceipt) ->
+        return true if advanceReceipt is -1
         percent = @_getAdvanceReceiptsPercent(stockCode)
         if percent  >= advanceReceipt
             return true
@@ -43,6 +50,7 @@ class GameLogic
         return @_balanceObj[stockCode].getAdvanceReceiptsPercent()
 
     _filterReceivableTurnoverDays: (stockCode, receivableTurnoverDays)->
+        return true if receivableTurnoverDays is -1
         day = @_getReceivableTurnOverDays(stockCode)
         if day < receivableTurnoverDays
             return true
@@ -61,6 +69,7 @@ class GameLogic
         return day
 
     _filterNetProfitQuality: (stockCode, netProfitQuality)->
+        return true if netProfitQuality is -1
         ratioTable = @_getNetProfitQuality(stockCode)
         aveRatio = utils.getAverage(ratioTable)
         if aveRatio > netProfitQuality
@@ -68,6 +77,7 @@ class GameLogic
         return false
 
     _filterROE: (stockCode, needRoe) ->
+        return true if needRoe is -1
         roeTable = @_getROE(stockCode)
         aveRoe = utils.getAverage(roeTable)
         if aveRoe > needRoe
@@ -75,12 +85,14 @@ class GameLogic
         return false
 
     _filterProfitAddRatio: (stockCode, needRatio)->
+        return true if needRatio is -1
         profitAddRatio = @_profitObj[stockCode].getNetProfitAddRatio()
         if profitAddRatio > needRatio
             return true
         return false
 
     _filterPE: (stockCode, maxPe)->
+        return true if maxPe is -1
         pe = @_profitObj[stockCode].getPE()
         if 0 < pe < maxPe
             return true
@@ -104,14 +116,12 @@ class GameLogic
 
     findMatchConditionStock:(profitAddRatio, roe, pe, advanceReceipt,receivableTurnoverDays, netProfitQuality)->
         matchStockTable = []
-        for stockCode in utils.getStockTable(global.dir)
+        for stockCode in utils.getStockTable("allA")
             stockCode = stockCode.slice(2, 8)
-            unless @_balanceObj[stockCode]?
-                console.log("loading haven't done:#{stockCode}")
-                continue
+            continue unless @_balanceObj[stockCode]?
             continue unless @_filterProfitAddRatio(stockCode, profitAddRatio)
             continue unless @_filterROE(stockCode, roe)
-            #continue unless @_filterPE(stockCode, pe)
+            continue unless @_filterPE(stockCode, pe)
             continue unless @_filterAdvanceReceiptsPercent(stockCode, advanceReceipt)
             continue unless @_filterReceivableTurnoverDays(stockCode, receivableTurnoverDays)
             continue unless @_filterNetProfitQuality(stockCode, netProfitQuality)
@@ -136,14 +146,15 @@ class GameLogic
         return roeTable
 
     _loadFileToObj: (stockCode)->
-        @_balanceObj[stockCode] = new BalanceSheet(dir, stockCode)
-        @_profitObj[stockCode] = new ProfitStatement(dir, stockCode)
-        @_cashFlowObj[stockCode] = new CashFlowStatement(dir, stockCode)
+        @_balanceObj[stockCode] = new BalanceSheet(stockCode)
+        @_profitObj[stockCode] = new ProfitStatement(stockCode)
+        @_cashFlowObj[stockCode] = new CashFlowStatement(stockCode)
 
-    _initTable: (dir)->
+    _loadTable: (dir)->
         totalIndex = 0
         stockTable = utils.getStockTable(dir)
         beginTime = new Date()
+        @_loadingFileStatus = true
         loadFile = =>
             return unless global.canLoad
             global.canLoad = false
@@ -152,11 +163,15 @@ class GameLogic
                 now = new Date()
                 dis = now - beginTime
                 @_dialog.controller.ccb_loading_label.setString("load over: use time #{dis // 1000 }s")
+                @_loadingFileStatus = false
                 return
             stockCode = stockTable[totalIndex]
             stockCode = stockCode.slice(2, 8)
             @_dialog.controller.ccb_loading_label.setString("loading ...#{stockCode}... #{totalIndex}/#{stockTable.length}")
-            @_loadFileToObj(stockCode)
+            if @_balanceObj[stockCode]?
+                global.canLoad = true
+            else
+                @_loadFileToObj(stockCode)
             totalIndex++
 
         @_dialog.controller.rootNode.schedule(loadFile)

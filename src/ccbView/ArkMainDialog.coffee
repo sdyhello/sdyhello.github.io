@@ -74,6 +74,19 @@ class ArkMainDialog
             callback : (str)=>
                 @showResult(str)
 
+    _loadFile: (dir)->
+        TDGA?.onEvent(dir)
+        eventManager.send eventNames.GAME_LOAD_TABLE, dir
+
+    onLoad500: ->
+        @_loadFile("zz500")
+
+    onLoad1000: ->
+        @_loadFile("zz1000")
+
+    onLoadAll: ->
+        @_loadFile("allA")
+
     onCalc: ->
         stockCode = @_ccb_stockCode.getString()
         years = @_ccb_year.getString()

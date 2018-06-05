@@ -3,7 +3,7 @@ utils 		= require '../tools/utils.coffee'
 
 class BalanceSheet extends TableBase
 	getFilePath:->
-		"res/#{@_stockType}_json/zcfzb_#{@_stockCode}.json"
+		"res/allA_json/zcfzb_#{@_stockCode}.json"
 
 	getCashValue: -> @getValue(@_data["货币资金(万元)"])
 

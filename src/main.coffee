@@ -14,7 +14,7 @@ cc.game.onStart = ()->
 
         gameDialog = require './ccbView/ArkMainDialog.coffee'
         sceneManager.addLayerToScene(gameDialog)
-        console.log("game start:#{global.dir}")
+
         GameLogic = require './control/ArkGameLogic.coffee'
         gameLogicObj = new GameLogic()
         gameLogicObj.init(gameDialog)
