@@ -71,6 +71,12 @@ class TableBase
 				if info[0].indexOf("" + @_stockCode) isnt -1
 					@_stockInfo = info
 					break
+		if @_dir.indexOf("allA") isnt -1
+			infoTable = StockInfoTable.getAllA()
+			for info in infoTable
+				if info[0].indexOf("" + @_stockCode) isnt -1
+					@_stockInfo = info
+					break
 		return
 
 module.exports = TableBase

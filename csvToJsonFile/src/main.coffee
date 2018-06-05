@@ -3,7 +3,7 @@ BalanceSheet 		= require "./TableControl/BalanceSheet.coffee"
 ProfitStatement 	= require "./TableControl/ProfitStatement.coffee"
 CashFlowStatement 	= require "./TableControl/CashFlowStatement.coffee"
 
-analysisDir = "../zz500"
+analysisDir = "../allA"
 
 BalanceSheetTable = []
 ProfitStatementTable = []
@@ -17,10 +17,14 @@ createClass = (stockCode)->
 
 
 fs.readdir(analysisDir,
-(err, files)->
-   for fileName in files
-      if fileName.indexOf("zcfzb") isnt -1
-         createClass(fileName)
+	(err, files)->
+		totalIndex = 0
+		for fileName, index in files
+#			break if totalIndex >= 1000
+			if fileName.indexOf("zcfzb") isnt -1
+				totalIndex++
+				console.log("index:#{fileName}")
+				createClass(fileName)
 )
 
 
