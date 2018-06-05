@@ -732,6 +732,18 @@
 							</dict>
 							<dict>
 								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>0</integer>
+									<integer>252</integer>
+									<integer>255</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
 								<string>dimensions</string>
 								<key>type</key>
 								<string>Size</string>
@@ -910,6 +922,18 @@
 							</dict>
 							<dict>
 								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>0</integer>
+									<integer>150</integer>
+									<integer>255</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
 								<string>dimensions</string>
 								<key>type</key>
 								<string>Size</string>
@@ -1083,6 +1107,18 @@
 								<key>value</key>
 								<array>
 									<real>25</real>
+									<integer>0</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>255</integer>
+									<integer>147</integer>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1266,6 +1302,18 @@
 							</dict>
 							<dict>
 								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>121</integer>
+									<integer>128</integer>
+									<integer>255</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
 								<string>dimensions</string>
 								<key>type</key>
 								<string>Size</string>
@@ -1439,6 +1487,18 @@
 								<key>value</key>
 								<array>
 									<real>25</real>
+									<integer>0</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>254</integer>
+									<integer>251</integer>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1622,6 +1682,18 @@
 							</dict>
 							<dict>
 								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>215</integer>
+									<integer>131</integer>
+									<integer>255</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
 								<string>dimensions</string>
 								<key>type</key>
 								<string>Size</string>
@@ -1796,6 +1868,18 @@
 								<array>
 									<real>25</real>
 									<integer>0</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>255</integer>
+									<integer>125</integer>
+									<integer>120</integer>
 								</array>
 							</dict>
 							<dict>
@@ -2167,7 +2251,7 @@
 						<key>type</key>
 						<string>String</string>
 						<key>value</key>
-						<string>300</string>
+						<string>hs300</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -2375,7 +2459,7 @@
 						<key>type</key>
 						<string>String</string>
 						<key>value</key>
-						<string>500</string>
+						<string>zz500</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -2583,7 +2667,7 @@
 						<key>type</key>
 						<string>String</string>
 						<key>value</key>
-						<string>1000</string>
+						<string>zz1000</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -2791,7 +2875,7 @@
 						<key>type</key>
 						<string>String</string>
 						<key>value</key>
-						<string>all</string>
+						<string>allA</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -2999,7 +3083,7 @@
 						<key>type</key>
 						<string>String</string>
 						<key>value</key>
-						<string>clear</string>
+						<string>clearLoad</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -3196,7 +3280,7 @@
 						<string>FloatScale</string>
 						<key>value</key>
 						<array>
-							<real>30</real>
+							<real>35</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -3207,9 +3291,9 @@
 						<string>Color3</string>
 						<key>value</key>
 						<array>
+							<integer>255</integer>
+							<integer>38</integer>
 							<integer>0</integer>
-							<integer>145</integer>
-							<integer>146</integer>
 						</array>
 					</dict>
 					<dict>
@@ -3369,7 +3453,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>1.5666667222976685</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
