@@ -56,6 +56,7 @@ class ArkMainDialog
         return editBox
 
     showResult: (result)->
+        result = "load file first" if typeof(result) isnt "string" and result.length is 1
         @ccb_result.setString(result.toString())
         ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         ArkScrollView.scrollJumpToTop(@_scrollView)
@@ -78,6 +79,9 @@ class ArkMainDialog
         TDGA?.onEvent(dir)
         eventManager.send eventNames.GAME_LOAD_TABLE, dir
 
+    onLoad300: ->
+        @_loadFile("hs300")
+
     onLoad500: ->
         @_loadFile("zz500")
 
@@ -86,6 +90,10 @@ class ArkMainDialog
 
     onLoadAll: ->
         @_loadFile("allA")
+
+    onClear: ->
+        TDGA?.onEvent("onClear")
+        eventManager.send eventNames.GAME_CLEAR_OBJ
 
     onCalc: ->
         stockCode = @_ccb_stockCode.getString()

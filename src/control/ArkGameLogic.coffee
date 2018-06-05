@@ -15,7 +15,6 @@ class GameLogic
         @_profitObj = {}
         @_cashFlowObj = {}
         @_registerEvents()
-        @_loadTable("hs300")
 
     _registerEvents: ->
         eventManager.listen(eventNames.GAME_GET_RESULT, (options)=>
@@ -37,6 +36,12 @@ class GameLogic
             return if @_loadingFileStatus
             global.canLoad = true
             @_loadTable(dir)
+        )
+
+        eventManager.listen(eventNames.GAME_CLEAR_OBJ, =>
+            @_balanceObj = {}
+            @_profitObj = {}
+            @_cashFlowObj = {}
         )
 
     _filterAdvanceReceiptsPercent:(stockCode, advanceReceipt) ->
