@@ -112,15 +112,15 @@ class GameLogic
         aveRoe = utils.getAverage(roeTable)
         
         PE  = @_profitObj[stockCode].getPE()
-        return utils.addTab(stockCode) + utils.addTab(baseInfo) +
+        return "\n" + utils.addTab(stockCode) + utils.addTab(baseInfo) +
             utils.addTab("净:#{profitAddRatio}") + 
             utils.addTab("roe:#{aveRoe}") +
             utils.addTab("PE:#{PE}") + 
             utils.addTab("应:#{@_getReceivableTurnOverDays(stockCode)}") +
             utils.addTab("预:#{@_getAdvanceReceiptsPercent(stockCode)}") +
             utils.addTab("现:#{utils.getAverage(@_getNetProfitQuality(stockCode))}") +
-            utils.addTab("统计时间: " + @_balanceObj[stockCode].getExistYears()) +
-            "\n"
+            "时:#{@_balanceObj[stockCode].getExistYears()}"
+            
 
     _isAllTableLoadFinish: (stockCode)->
         balance = @_balanceObj[stockCode]?.isLoadFinish()
@@ -143,7 +143,7 @@ class GameLogic
         return @_getStockTableInfo(matchStockTable)
 
     _getStockTableInfo: (matchStockTable)->
-        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润复合增长率 \t 平均ROE \t PE \t 应收 \t 预收 \t 现金流 \t  总数:#{matchStockTable.length}\n"]
+        stockInfoTable = ["股票代码 \t 基本信息 \t 所属行业 \t 利润增长率 \t 平均ROE \t PE \t 应收 \t 预收 \t 现金流 \t  总数:#{matchStockTable.length}"]
         for stockCode in matchStockTable
             stockInfoTable.push @_getStockInfo(stockCode)
         console.log(stockInfoTable)
