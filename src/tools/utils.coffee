@@ -30,5 +30,12 @@ utils =
             when "allA"
                 stockTable = stockTableAllA
         return stockTable
+
+    getValueDillion: (numberTable)->
+        numberDillion = []
+        for number in numberTable
+            numberStr = (parseInt(number) / 10000).toFixed(2) + "亿"
+            numberDillion.push numberStr
+        return numberDillion
         
 module.exports = utils

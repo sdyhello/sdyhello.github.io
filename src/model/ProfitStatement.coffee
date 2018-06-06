@@ -8,17 +8,17 @@ class ProfitStatement extends TableBase
 	getIncomeValue: -> @getValue(@_data["营业收入(万元)"])
 
 	getNetProfitAddRatio: ->
-		netProfitTable = @getValue(@_data["净利润(万元)"])
+		netProfitTable = @getNetProfitTable()
 		addTimes = netProfitTable[0] / netProfitTable[netProfitTable.length - 1]
 		addRatio = utils.getCompoundRate(addTimes, global.year)
 		addRatio = ((addRatio - 1) * 100).toFixed(2)
 		addRatio
 
 	getNetProfitTable : ->
-		@getValue(@_data["净利润(万元)"])
+		@getValue(@_data["归属于母公司所有者的净利润(万元)"])
 
 	getNetProfitYoy: ->
-		profitTable = @getValue(@_data["净利润(万元)"])
+		profitTable = @getNetProfitTable()
 		addRatio = []
 		for profit, index in profitTable
 			break if index >= profitTable.length - 1

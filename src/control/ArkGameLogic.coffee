@@ -207,14 +207,16 @@ class GameLogic
         unless @_profitObj[stockCode]?
             @_loadFileToObj(stockCode)
             return "loadFile ok, try again!"
-        infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo() + "\n"
-        infoTable.push "年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy() + "\n"
-        infoTable.push "净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "\n"
-        infoTable.push "历年ROE:   " + @_getROE(stockCode) + "平均: #{utils.getAverage(@_getROE(stockCode))}" + "\n"
-        infoTable.push "PE:   " + @_profitObj[stockCode].getPE() + "\n"
-        infoTable.push "现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))} " + "\n"
-        infoTable.push "应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)} \n"
-        infoTable.push "预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}"
+        infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo()
+        infoTable.push "\n净利润： " + utils.getValueDillion(@_profitObj[stockCode].getNetProfitTable())
+        infoTable.push "\n年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy()
+        infoTable.push "\n净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio()
+        infoTable.push "\n历年ROE:   " + @_getROE(stockCode) + "平均: #{utils.getAverage(@_getROE(stockCode))}"
+        infoTable.push "\nPE:   " + @_profitObj[stockCode].getPE()
+        infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))} "
+        infoTable.push "\n应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)}"
+        infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}"
+        infoTable.push "\n top7: #{@_balanceObj[stockCode].getTop7()}"
         console.log(infoTable)
         infoTable
 

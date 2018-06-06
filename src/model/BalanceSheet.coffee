@@ -15,21 +15,34 @@ class BalanceSheet extends TableBase
 
 	getReceivableValue: -> @getValue(@_data["应收账款(万元)"])
 
-	dumpPercentTable: ->
+	getTop7: ->
 		totalAssets = @getTotalAssets()
-		assetsPercentTable = []
+		assetsPercentTable = {}
 		for key , value of @_data
-			percentTable = [key + "\t\t\t\t\t"]
+			percentTable = []
 			continue if value[0] is 0
 			continue if key in @_getNoNeedCalcItems()
 			for celValue, index in @getValue(value)
 				percent = celValue / totalAssets[index] * 100
-				percentTable.push percent.toFixed(2)
-				percentTable.push "\t\t\t\t"
-			percentTable.push "\n"
-			assetsPercentTable.push percentTable
-		console.log(JSON.stringify(assetsPercentTable, null, "\t"))
-		return assetsPercentTable
+				percentTable.push percent
+			assetsPercentTable[key] = utils.getAverage(percentTable)
+		sortedObjKeys = Object.keys(assetsPercentTable).sort(
+			(a, b)->
+				return assetsPercentTable[b] - assetsPercentTable[a]
+		)
+		useAbleTable = []
+		disAbleTable = ["未分配利润(万元)", "盈余公积(万元)", "资本公积(万元)", "少数股东权益(万元)"]
+		for key in sortedObjKeys
+			continue if key.indexOf("计") isnt -1
+			continue if key in disAbleTable
+			useAbleTable.push key
+		top7Key = useAbleTable.slice(0, 7)
+		top7Info = []
+		for key in top7Key
+			top7Info.push [key.slice(0, key.indexOf("(")), assetsPercentTable[key]]
+		console.log("order top7:#{JSON.stringify(top7Info)}")
+		top7Info
+
 
 	getCurrentRatio: ->
 		currentAssetsTable = @getValue(@_data["流动资产合计(万元)"])
