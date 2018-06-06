@@ -15,7 +15,7 @@ class BalanceSheet extends TableBase
 
 	getReceivableValue: -> @getValue(@_data["应收账款(万元)"])
 
-	getTop7: ->
+	getTop10: ->
 		totalAssets = @getTotalAssets()
 		assetsPercentTable = {}
 		for key , value of @_data
@@ -36,12 +36,11 @@ class BalanceSheet extends TableBase
 			continue if key.indexOf("计") isnt -1
 			continue if key in disAbleTable
 			useAbleTable.push key
-		top7Key = useAbleTable.slice(0, 7)
-		top7Info = []
-		for key in top7Key
-			top7Info.push [key.slice(0, key.indexOf("(")), assetsPercentTable[key]]
-		console.log("order top7:#{JSON.stringify(top7Info)}")
-		top7Info
+		top10Key = useAbleTable.slice(0, 10)
+		top10Info = []
+		for key in top10Key
+			top10Info.push key.slice(0, key.indexOf("(")) + ":" + assetsPercentTable[key] + '%'
+		top10Info
 
 
 	getCurrentRatio: ->

@@ -216,7 +216,7 @@ class GameLogic
         infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))} "
         infoTable.push "\n应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)}"
         infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}"
-        infoTable.push "\n top7: #{@_balanceObj[stockCode].getTop7()}"
+        infoTable.push "\n Top10: #{@_balanceObj[stockCode].getTop10()}"
         console.log(infoTable)
         infoTable
 
