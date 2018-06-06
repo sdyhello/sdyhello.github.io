@@ -1,6 +1,7 @@
 eventManager = require '../event/ArkEventManager.coffee'
 eventNames = require '../event/ArkEventNames.coffee'
 ArkScrollView = require '../tools/ScrollView.coffee'
+storage = require '../tools/storage.coffee'
 
 g_click_times = 0
 
@@ -34,14 +35,24 @@ class ArkMainDialog
         @_initEditBoxData()
 
     _initEditBoxData: ->
-        @_ccb_stockCode.setString("600519")
+        @_ccb_stockCode.setString(storage.getItem("stockCode") or "600519")
+
+        filterObj = storage.getItem("filterObj") or {
+            profitAddRatio: "12"
+            roe: "15"
+            pe: "60"
+            advanceReceipt: "5"
+            receivableTurnoverDays: "30"
+            netProfitQuality: "0.8"
+        }
+        global.year = storage.getItem("years") or 6
         @_ccb_year.setString(global.year + "")
-        @_ccb_profitAddRatio.setString("12")
-        @_ccb_roe.setString("15")
-        @_ccb_pe.setString("60")
-        @_ccb_advanceReceipts.setString("5")
-        @_ccb_receivableTurnoverDays.setString("30")
-        @_ccb_netProfitQuality.setString("0.8")
+        @_ccb_profitAddRatio.setString(filterObj.profitAddRatio)
+        @_ccb_roe.setString(filterObj.roe)
+        @_ccb_pe.setString(filterObj.pe)
+        @_ccb_advanceReceipts.setString(filterObj.advanceReceipt)
+        @_ccb_receivableTurnoverDays.setString(filterObj.receivableTurnoverDays)
+        @_ccb_netProfitQuality.setString(filterObj.netProfitQuality)
 
     _createEditBox: (node)->
         editBox = new cc.EditBox(cc.size(100, 50), new cc.Scale9Sprite("res/ccbResources/9_back.png"))
@@ -61,17 +72,32 @@ class ArkMainDialog
         ArkScrollView.initFromContainer(@_scrollView, @ccb_result)
         ArkScrollView.scrollJumpToTop(@_scrollView)
 
-    onFilter: ->
+    _setYears: ->
         years = @_ccb_year.getString()
-        TDGA?.onEvent("onFilter")
         global.year = years
+        storage.setItem("years", years)
+
+    onFilter: ->
+        TDGA?.onEvent("onFilter")
+        @_setYears()
+
+        profitAddRatio          = @_ccb_profitAddRatio.getString()
+        roe                     = @_ccb_roe.getString()
+        pe                      = @_ccb_pe.getString()
+        advanceReceipt          = @_ccb_advanceReceipts.getString()
+        receivableTurnoverDays  = @_ccb_receivableTurnoverDays.getString()
+        netProfitQuality        = @_ccb_netProfitQuality.getString()
+
+        storage.setItem("filterObj", {profitAddRatio, roe, pe, 
+            advanceReceipt, receivableTurnoverDays, netProfitQuality})
+
         eventManager.send eventNames.GAME_FILTER,
-            profitAddRatio          : parseFloat(@_ccb_profitAddRatio.getString())
-            roe                     : parseFloat(@_ccb_roe.getString())
-            pe                      : parseFloat(@_ccb_pe.getString())
-            advanceReceipt          : parseFloat(@_ccb_advanceReceipts.getString())
-            receivableTurnoverDays  : parseFloat(@_ccb_receivableTurnoverDays.getString())
-            netProfitQuality        : parseFloat(@_ccb_netProfitQuality.getString())
+            profitAddRatio          : parseFloat(profitAddRatio)
+            roe                     : parseFloat(roe)
+            pe                      : parseFloat(pe)
+            advanceReceipt          : parseFloat(advanceReceipt)
+            receivableTurnoverDays  : parseFloat(receivableTurnoverDays)
+            netProfitQuality        : parseFloat(netProfitQuality)
             callback : (str)=>
                 @showResult(str)
 
@@ -94,9 +120,10 @@ class ArkMainDialog
 
     onCalc: ->
         stockCode = @_ccb_stockCode.getString()
+        storage.setItem("stockCode", stockCode)
         years = @_ccb_year.getString()
         TDGA?.onEvent("onCalc", {stockCode, years})
-        global.year = years
+        @_setYears()
         eventManager.send eventNames.GAME_GET_RESULT,
             stockCode: stockCode
             callback: (str)=>
