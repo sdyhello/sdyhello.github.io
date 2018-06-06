@@ -1030,8 +1030,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>762.44000244140625</real>
-							<real>47.60003662109375</real>
+							<real>835.44000244140625</real>
+							<real>31.60003662109375</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1068,6 +1068,8 @@
 						<false/>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>

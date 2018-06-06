@@ -52,7 +52,7 @@ class ArkMainDialog
         editBox.setInputFlag(cc.EDITBOX_INPUT_FLAG_INITIAL_CAPS_SENTENCE)
         editBox.setMaxLength(13)
         editBox.setFont("Arial", 26)
-        editBox.setFontColor(cc.color(100, 100, 255, 255))
+        editBox.setFontColor(cc.color(0xFF, 0x34, 0xB3, 255))
         return editBox
 
     showResult: (result)->
