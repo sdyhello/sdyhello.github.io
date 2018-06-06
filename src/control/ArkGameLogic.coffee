@@ -113,10 +113,12 @@ class GameLogic
         
         PE  = @_profitObj[stockCode].getPE()
         return utils.addTab(stockCode) + utils.addTab(baseInfo) +
-            utils.addTab(profitAddRatio) + utils.addTab(aveRoe) +
-            utils.addTab("PE:#{PE}") + utils.addTab(utils.getAverage(@_getNetProfitQuality(stockCode))) +
+            utils.addTab("净:#{profitAddRatio}") + 
+            utils.addTab("roe:#{aveRoe}") +
+            utils.addTab("PE:#{PE}") + 
             utils.addTab("应:#{@_getReceivableTurnOverDays(stockCode)}") +
             utils.addTab("预:#{@_getAdvanceReceiptsPercent(stockCode)}") +
+            utils.addTab("现:#{utils.getAverage(@_getNetProfitQuality(stockCode))}") +
             utils.addTab("统计时间: " + @_balanceObj[stockCode].getExistYears()) +
             "\n"
 

@@ -1068,8 +1068,6 @@
 						<false/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>
@@ -1864,9 +1862,9 @@
 										<string>Color3</string>
 										<key>value</key>
 										<array>
-											<integer>121</integer>
-											<integer>128</integer>
-											<integer>255</integer>
+											<integer>254</integer>
+											<integer>251</integer>
+											<integer>0</integer>
 										</array>
 									</dict>
 									<dict>
@@ -1903,7 +1901,7 @@
 										<key>type</key>
 										<string>Text</string>
 										<key>value</key>
-										<string>预:</string>
+										<string>应：</string>
 									</dict>
 								</array>
 							</dict>
@@ -1911,9 +1909,9 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>ccb_advanceReceipts</string>
+						<string>ccb_receivableTurnoverDays</string>
 						<key>memberVarAssignmentName</key>
-						<string>ccb_advanceReceipts</string>
+						<string>ccb_receivableTurnoverDays</string>
 						<key>memberVarAssignmentType</key>
 						<integer>1</integer>
 						<key>properties</key>
@@ -2054,9 +2052,9 @@
 										<string>Color3</string>
 										<key>value</key>
 										<array>
-											<integer>254</integer>
-											<integer>251</integer>
-											<integer>0</integer>
+											<integer>121</integer>
+											<integer>128</integer>
+											<integer>255</integer>
 										</array>
 									</dict>
 									<dict>
@@ -2093,7 +2091,7 @@
 										<key>type</key>
 										<string>Text</string>
 										<key>value</key>
-										<string>应：</string>
+										<string>预:</string>
 									</dict>
 								</array>
 							</dict>
@@ -2101,9 +2099,9 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>ccb_receivableTurnoverDays</string>
+						<string>ccb_advanceReceipts</string>
 						<key>memberVarAssignmentName</key>
-						<string>ccb_receivableTurnoverDays</string>
+						<string>ccb_advanceReceipts</string>
 						<key>memberVarAssignmentType</key>
 						<integer>1</integer>
 						<key>properties</key>
@@ -2153,6 +2151,8 @@
 								<false/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>baseClass</key>
