@@ -29,8 +29,9 @@ class GameLogic
             advanceReceipt = options.advanceReceipt
             receivableTurnoverDays = options.receivableTurnoverDays
             netProfitQuality = options.netProfitQuality
+            debt = options.debt
             options.callback?(@findMatchConditionStock(profitAddRatio, roe, pe, advanceReceipt,
-              receivableTurnoverDays, netProfitQuality))
+              receivableTurnoverDays, netProfitQuality, debt))
         )
 
         eventManager.listen(eventNames.GAME_LOAD_TABLE, (dir) =>
@@ -104,6 +105,13 @@ class GameLogic
             return true
         return false
 
+    _filterInterestDebt: (stockCode, limitInterestDebt)->
+        return true if limitInterestDebt is -1
+        interestDebt = @_balanceObj[stockCode].getInterestDebt()
+        if interestDebt < limitInterestDebt
+            return true
+        return false
+
     _getStockInfo: (stockCode)->
         baseInfo = @_profitObj[stockCode].getBaseInfo()
         profitAddRatio = @_profitObj[stockCode].getNetProfitAddRatio()
@@ -128,7 +136,7 @@ class GameLogic
         cashFlow = @_cashFlowObj[stockCode]?.isLoadFinish()
         return balance and profit and cashFlow
 
-    findMatchConditionStock:(profitAddRatio, roe, pe, advanceReceipt,receivableTurnoverDays, netProfitQuality)->
+    findMatchConditionStock:(profitAddRatio, roe, pe, advanceReceipt,receivableTurnoverDays, netProfitQuality, debt)->
         matchStockTable = []
         for stockCode in utils.getStockTable("allA")
             stockCode = stockCode.slice(2, 8)
@@ -139,6 +147,7 @@ class GameLogic
             continue unless @_filterAdvanceReceiptsPercent(stockCode, advanceReceipt)
             continue unless @_filterReceivableTurnoverDays(stockCode, receivableTurnoverDays)
             continue unless @_filterNetProfitQuality(stockCode, netProfitQuality)
+            continue unless @_filterInterestDebt(stockCode, debt)
             matchStockTable.push stockCode
         return @_getStockTableInfo(matchStockTable)
 
@@ -208,15 +217,19 @@ class GameLogic
             @_loadFileToObj(stockCode)
             return "loadFile ok, try again!"
         infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo()
+        infoTable.push "\nPE:   " + @_profitObj[stockCode].getPE()
+        infoTable.push "\n总资产：#{utils.getValueDillion(@_balanceObj[stockCode].getTotalAssets()[0])}"
+        infoTable.push "\n总市值：#{utils.getValueDillion(@_balanceObj[stockCode].getTotalMarketValue() / 10000)}"
+        infoTable.push "\n Top10: #{@_balanceObj[stockCode].getTop10()}"
+        infoTable.push "\n有息负债: #{@_balanceObj[stockCode].getInterestDebt()}%"
+        infoTable.push "\n应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)}"
+        infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}"
         infoTable.push "\n净利润： " + utils.getValueDillion(@_profitObj[stockCode].getNetProfitTable())
+        infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))} "
         infoTable.push "\n年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy()
         infoTable.push "\n净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio()
         infoTable.push "\n历年ROE:   " + @_getROE(stockCode) + "平均: #{utils.getAverage(@_getROE(stockCode))}"
-        infoTable.push "\nPE:   " + @_profitObj[stockCode].getPE()
-        infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))} "
-        infoTable.push "\n应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)}"
-        infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}"
-        infoTable.push "\n Top10: #{@_balanceObj[stockCode].getTop10()}"
+        
         console.log(infoTable)
         infoTable
 

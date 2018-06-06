@@ -31,11 +31,13 @@ utils =
                 stockTable = stockTableAllA
         return stockTable
 
-    getValueDillion: (numberTable)->
-        numberDillion = []
-        for number in numberTable
-            numberStr = (parseInt(number) / 10000).toFixed(2) + "亿"
-            numberDillion.push numberStr
-        return numberDillion
-        
+    getValueDillion: (value)->
+        if typeof(value) is "object"
+            numberDillion = []
+            for number in value
+                numberStr = (parseInt(number) / 10000).toFixed(2) + "亿"
+                numberDillion.push numberStr
+            return numberDillion
+        else
+            return (parseInt(value) / 10000).toFixed(2) + "亿"
 module.exports = utils

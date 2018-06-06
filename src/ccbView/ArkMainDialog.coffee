@@ -28,7 +28,7 @@ class ArkMainDialog
 
     _initEditBoxNode: ->
         textFileNameTable = ["ccb_profitAddRatio", "ccb_roe", "ccb_pe", "ccb_year", "ccb_stockCode",
-            "ccb_advanceReceipts", "ccb_receivableTurnoverDays", "ccb_netProfitQuality"]
+            "ccb_advanceReceipts", "ccb_receivableTurnoverDays", "ccb_netProfitQuality", "ccb_debt"]
         for textFileName in textFileNameTable
             @["_#{textFileName}"] = @_createEditBox(@["#{textFileName}"])
             @rootNode.addChild(@["_#{textFileName}"])
@@ -44,6 +44,7 @@ class ArkMainDialog
             advanceReceipt: "5"
             receivableTurnoverDays: "30"
             netProfitQuality: "0.8"
+            debt: "-1"
         }
         global.year = storage.getItem("years") or 6
         @_ccb_year.setString(global.year + "")
@@ -53,6 +54,7 @@ class ArkMainDialog
         @_ccb_advanceReceipts.setString(filterObj.advanceReceipt)
         @_ccb_receivableTurnoverDays.setString(filterObj.receivableTurnoverDays)
         @_ccb_netProfitQuality.setString(filterObj.netProfitQuality)
+        @_ccb_debt.setString(filterObj.debt)
 
     _createEditBox: (node)->
         editBox = new cc.EditBox(cc.size(100, 50), new cc.Scale9Sprite("res/ccbResources/9_back.png"))
@@ -87,9 +89,10 @@ class ArkMainDialog
         advanceReceipt          = @_ccb_advanceReceipts.getString()
         receivableTurnoverDays  = @_ccb_receivableTurnoverDays.getString()
         netProfitQuality        = @_ccb_netProfitQuality.getString()
+        debt                    = @_ccb_debt.getString()
 
         storage.setItem("filterObj", {profitAddRatio, roe, pe, 
-            advanceReceipt, receivableTurnoverDays, netProfitQuality})
+            advanceReceipt, receivableTurnoverDays, netProfitQuality, debt})
 
         eventManager.send eventNames.GAME_FILTER,
             profitAddRatio          : parseFloat(profitAddRatio)
@@ -98,6 +101,7 @@ class ArkMainDialog
             advanceReceipt          : parseFloat(advanceReceipt)
             receivableTurnoverDays  : parseFloat(receivableTurnoverDays)
             netProfitQuality        : parseFloat(netProfitQuality)
+            debt                    : parseFloat(debt)
             callback : (str)=>
                 @showResult(str)
 

@@ -15,17 +15,21 @@ class BalanceSheet extends TableBase
 
 	getReceivableValue: -> @getValue(@_data["应收账款(万元)"])
 
+	getInterestDebt: ->
+		value1 = @getValue(@_data["短期借款(万元)"])[0]
+		value2 = @getValue(@_data["长期借款(万元)"])[0]
+		value3 = @getValue(@_data["应付债券(万元)"])[0]
+		totalAssets = @getTotalAssets()[0]
+		return ((value1 + value2 + value3) / totalAssets * 100).toFixed(2)
+
 	getTop10: ->
 		totalAssets = @getTotalAssets()
 		assetsPercentTable = {}
 		for key , value of @_data
-			percentTable = []
 			continue if value[0] is 0
 			continue if key in @_getNoNeedCalcItems()
-			for celValue, index in @getValue(value)
-				percent = celValue / totalAssets[index] * 100
-				percentTable.push percent
-			assetsPercentTable[key] = utils.getAverage(percentTable)
+			percent = @getValue(value)[0] / totalAssets[0] * 100
+			assetsPercentTable[key] = percent.toFixed(2)
 		sortedObjKeys = Object.keys(assetsPercentTable).sort(
 			(a, b)->
 				return assetsPercentTable[b] - assetsPercentTable[a]

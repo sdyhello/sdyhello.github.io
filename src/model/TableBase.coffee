@@ -27,6 +27,8 @@ class TableBase
 
 	getSharePrice: -> @_data["资料"][1]
 
+	getTotalMarketValue: -> @_data["资料"][3]
+
 	_getShowNumber : (number)->
 		return "#{(number / 100000).toFixed(2)} 亿"
 
