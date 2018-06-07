@@ -1,10 +1,15 @@
+StockInfoTable = require '../StockInfoTable.coffee'
 
 class TableBase
 	constructor: (@_stockCode)->
 		@_data = null
+		@_dataObj = {}
 		@_loadJson()
+		@_setStockInfo()
 
 	getFilePath: ->
+
+	getFirstColTitle: ->
 
 	getStockCode: -> @_stockCode
 
@@ -14,15 +19,66 @@ class TableBase
 
 	_loadJson: ->
 		filePath = @getFilePath()
-		cc.loader.loadJson(filePath, (error, data)=>
+		cc.loader.loadTxt(filePath, (error, data)=>
 			unless data?
 				console.log("load #{@_stockCode} failed !!")
+			dataTable = @_csvToArray(data)
+			@_data = dataTable
+			@_data.unshift(@_stockInfo)
+			@_initTable(@getFirstColTitle())
 			global.count += 1
 			if global.count is 3
 				global.count = 0
 				global.canLoad = true
-			@_data = data
+
 		)
+
+	_initTable: (title)->
+		@_replaceFirstColTitle(title)
+		@_replaceNullCell()
+		@_changeToObj()
+
+	_replaceFirstColTitle : (title)->
+		for item, index in @_data
+			item[0] = title[index]
+		return
+
+	_replaceNullCell: ->
+		for item, index in @_data
+			for value, count in item
+				if value is "--"
+					item[count] = 0
+		return
+
+	_changeToObj: ->
+		for item in @_data
+			continue unless item[0]?
+			@_dataObj[item[0]] = item.slice(1, item.length)
+		@_data = @_dataObj
+
+	_csvToArray : (strData, strDelimiter )->
+	    strDelimiter = (strDelimiter || ",");
+	    objPattern = new RegExp(
+	        (
+	            "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+	            "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+	            "([^\"\\" + strDelimiter + "\\r\\n]*))"
+	            ),
+	        "gi"
+	    )
+	    arrData = [[]];
+	    arrMatches = null;
+	    while (arrMatches = objPattern.exec( strData ))
+	        strMatchedDelimiter = arrMatches[ 1 ]
+	        if (strMatchedDelimiter.length &&(strMatchedDelimiter != strDelimiter))
+	            arrData.push( [] );
+	        if (arrMatches[ 2 ])
+	            strMatchedValue = arrMatches[ 2 ].replace(new RegExp( "\"\"", "g" ),"\"")
+	        else
+	            strMatchedValue = arrMatches[ 3 ];
+	        arrData[ arrData.length - 1 ].push( strMatchedValue );
+	    return arrData
+
 	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
 
 	getSharePrice: -> @_data["资料"][1]
@@ -60,6 +116,7 @@ class TableBase
 		return intTable
 
 	getValue: (data, doNotToInt)->
+		return unless data?
 		yearIndexTable = @_getYearValueIndex()
 		valueTable = []
 		for index in yearIndexTable
@@ -69,5 +126,13 @@ class TableBase
 		if doNotToInt
 			return valueTable
 		return @_formatToInt(valueTable)
+
+	_setStockInfo: ->
+		infoTable = StockInfoTable.getAllA()
+		for info in infoTable
+			if info[0].indexOf("" + @_stockCode) isnt -1
+				@_stockInfo = info
+				break
+		return
 		
 module.exports = TableBase

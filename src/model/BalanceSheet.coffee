@@ -1,9 +1,13 @@
 TableBase 	= require "./TableBase.coffee"
 utils 		= require '../tools/utils.coffee'
+TitleName 	= require "../title.coffee"
 
 class BalanceSheet extends TableBase
 	getFilePath:->
-		"res/allA_json/zcfzb_#{@_stockCode}.json"
+		"res/allA/zcfzb_#{@_stockCode}.csv"
+
+	getFirstColTitle: ->
+		TitleName.getBalanceTitle()
 
 	getCashValue: -> @getValue(@_data["货币资金(万元)"])
 

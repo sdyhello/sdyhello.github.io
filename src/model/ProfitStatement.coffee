@@ -1,9 +1,13 @@
 TableBase 	= require "./TableBase.coffee"
 utils 		= require '../tools/utils.coffee'
+TitleName 	= require "../title.coffee"
 
 class ProfitStatement extends TableBase
 	getFilePath: ->
-		"res/allA_json/lrb_#{@_stockCode}.json"
+		"res/allA/lrb_#{@_stockCode}.csv"
+
+	getFirstColTitle: ->
+		TitleName.getProfitTitle()
 
 	getIncomeValue: -> @getValue(@_data["营业收入(万元)"])
 
@@ -11,7 +15,7 @@ class ProfitStatement extends TableBase
 		netProfitTable = @getNetProfitTable()
 		addTimes = netProfitTable[0] / netProfitTable[netProfitTable.length - 1]
 		addRatio = utils.getCompoundRate(addTimes, global.year)
-		addRatio = ((addRatio - 1) * 100).toFixed(2)
+		addRatio = ((addRatio - 1) * 100).toFixed(2) + "%"
 		addRatio
 
 	getNetProfitTable : ->
@@ -22,7 +26,7 @@ class ProfitStatement extends TableBase
 		addRatio = []
 		for profit, index in profitTable
 			break if index >= profitTable.length - 1
-			addRatio.push ((profit - profitTable[index + 1]) / profitTable[index + 1] * 100).toFixed(2)
+			addRatio.push ((profit - profitTable[index + 1]) / profitTable[index + 1] * 100).toFixed(2) + "%"
 		addRatio
 
 	getPE: ->
