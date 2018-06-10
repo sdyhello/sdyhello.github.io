@@ -300,6 +300,8 @@ class GameLogic
                 return sameIndustryInfoObj[b] - sameIndustryInfoObj[a]
         )
         topStockCode = sortedObjKeys[0]
+        if type is "应收账款"
+            topStockCode = sortedObjKeys[sortedObjKeys.length - 1]
         info3 = "\t最高:" + topStockCode + "---" + @_balanceObj[topStockCode].getStockName() + "：#{sameIndustryInfoObj[topStockCode]}"
         return info1 + info2 + info3
 
