@@ -3,9 +3,10 @@ StockInfoTable = require '../StockInfoTable.coffee'
 class TableBase
 	constructor: (@_stockCode)->
 		@_data = null
+		@_stockInfo = []
 		@_dataObj = {}
-		@_loadJson()
 		@_setStockInfo()
+		@_loadJson()
 
 	getFilePath: ->
 
@@ -135,7 +136,8 @@ class TableBase
 		infoTable = StockInfoTable.getAllA()
 		for info in infoTable
 			if info[0].indexOf("" + @_stockCode) isnt -1
-				@_stockInfo = info
+				for value in info
+					@_stockInfo.push value
 				break
 		return
 		

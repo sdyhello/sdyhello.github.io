@@ -303,6 +303,12 @@ class GameLogic
         if type is "应收账款"
             topStockCode = sortedObjKeys[sortedObjKeys.length - 1]
         info3 = "\t最高:" + topStockCode + "---" + @_balanceObj[topStockCode].getStockName() + "：#{sameIndustryInfoObj[topStockCode]}"
+        
+        orderInfo = []
+        for key in sortedObjKeys
+            orderInfo.push @_balanceObj[key].getBaseInfo() + "\t" + sameIndustryInfoObj[key]
+
+        console.log(type, orderInfo)
         return info1 + info2 + info3
 
 module.exports = GameLogic
