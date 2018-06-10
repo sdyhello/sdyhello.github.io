@@ -226,7 +226,7 @@ class GameLogic
         infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}%"
         infoTable.push "\n净利润： " + utils.getValueDillion(@_profitObj[stockCode].getNetProfitTable())
         infoTable.push "\n年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy()
-        infoTable.push "\n净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio()
+        infoTable.push "\n净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "%"
         infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))}"
         infoTable.push "\n历年ROE:   " + @_getROE(stockCode) + "平均: #{utils.getAverage(@_getROE(stockCode))}%"
         

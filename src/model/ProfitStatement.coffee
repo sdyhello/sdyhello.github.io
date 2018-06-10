@@ -15,7 +15,7 @@ class ProfitStatement extends TableBase
 		netProfitTable = @getNetProfitTable()
 		addTimes = netProfitTable[0] / netProfitTable[netProfitTable.length - 1]
 		addRatio = utils.getCompoundRate(addTimes, global.year)
-		addRatio = ((addRatio - 1) * 100).toFixed(2) + "%"
+		addRatio = ((addRatio - 1) * 100).toFixed(2)
 		addRatio
 
 	getNetProfitTable : ->
