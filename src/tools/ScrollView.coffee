@@ -3,7 +3,7 @@ ScrollView =
         size = targetNode.getContentSize()
         container = new cc.Node()
         scrollView = new cc.ScrollView(size, container)
-        scrollView.setPosition(targetNode.getPosition())
+        scrollView.setPosition(targetNode.convertToWorldSpace(cc.p(0, 0)))
         scrollView.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL)
         scrollView.setTouchEnabled(true)
         scrollView

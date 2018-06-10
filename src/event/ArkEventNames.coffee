@@ -8,5 +8,6 @@ EventNames =
     GAME_FILTER     : "game.filter"
     GAME_LOAD_TABLE : "game.load.table"
     GAME_CLEAR_OBJ  : "game.clear.obj"
+    GAME_PERCENT_AVERAGE    : "game.percent.average"
 
 module.exports = EventNames

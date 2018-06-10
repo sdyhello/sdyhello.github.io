@@ -133,6 +133,12 @@ class ArkMainDialog
             callback: (str)=>
                 @showResult(str)
 
+    onGetIndustryAverage: ->
+        eventManager.send eventNames.GAME_PERCENT_AVERAGE,
+            stockCode: @_ccb_stockCode.getString()
+            callback: (info)=>
+                @showResult(info)
+
     cc.BuilderReader.registerController(
         "ArkMainDialog"
         new ArkMainDialog()

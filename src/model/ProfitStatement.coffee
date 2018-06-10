@@ -11,6 +11,8 @@ class ProfitStatement extends TableBase
 
 	getIncomeValue: -> @getValue(@_data["营业收入(万元)"])
 
+	getOperatingCosts: -> @getValue(@_data["营业成本(万元)"])
+
 	getNetProfitAddRatio: ->
 		netProfitTable = @getNetProfitTable()
 		addTimes = netProfitTable[0] / netProfitTable[netProfitTable.length - 1]
@@ -28,6 +30,18 @@ class ProfitStatement extends TableBase
 			break if index >= profitTable.length - 1
 			addRatio.push ((profit - profitTable[index + 1]) / profitTable[index + 1] * 100).toFixed(2) + "%"
 		addRatio
+
+	getSingleYearNetProfitRatio: ->
+		netProfit = @getNetProfitTable()[0]
+		incomeValue = @getIncomeValue()[0]
+		netProfitRatio = (netProfit / incomeValue * 100).toFixed(2)
+		netProfitRatio
+
+	getSingleYearGrossProfitRatio: ->
+		incomeValue = @getIncomeValue()[0]
+		operatingCosts = @getOperatingCosts()[0]
+		grossProfitRatio = ((incomeValue - operatingCosts) / incomeValue * 100).toFixed(2)
+		grossProfitRatio
 
 	getPE: ->
 		earnPerShare = @getValue(@_data["基本每股收益"], true)[0]

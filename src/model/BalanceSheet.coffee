@@ -76,4 +76,10 @@ class BalanceSheet extends TableBase
 			percent.push (advanceReceipt / totalAssetsTable[index]) * 100
 		utils.getAverage(percent)
 
+	getSingleYearAverageInventory: ->
+		inventoryTable = @getValue(@_data["存货(万元)"])
+		averageInventory = (inventoryTable[0] + inventoryTable[1]) / 2
+		averageInventory
+
+
 module.exports = BalanceSheet

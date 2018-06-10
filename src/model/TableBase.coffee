@@ -81,6 +81,8 @@ class TableBase
 
 	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
 
+	getIndustry: -> @_data["资料"][2]
+
 	getSharePrice: -> @_data["资料"][1]
 
 	getTotalMarketValue: -> @_data["资料"][3]

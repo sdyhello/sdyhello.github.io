@@ -46,6 +46,20 @@ class GameLogic
             @_cashFlowObj = {}
         )
 
+        eventManager.listen(eventNames.GAME_PERCENT_AVERAGE, ({stockCode, callback})=>
+            industry = @_balanceObj[stockCode].getIndustry()
+            inventoryTurnoverRatioTable = []
+            for stockCode in utils.getStockTable("allA")
+                stockCode = stockCode.slice(2, 8)
+                continue unless @_isAllTableLoadFinish(stockCode)
+                if (@_balanceObj[stockCode].getIndustry() is industry)
+                    inventoryTurnoverRatio = @_getInventoryTurnoverRatio(stockCode)
+                    console.log("同行:#{@_balanceObj[stockCode].getBaseInfo()}, #{inventoryTurnoverRatio}")
+                    inventoryTurnoverRatioTable.push inventoryTurnoverRatio
+            return callback(utils.getAverage(inventoryTurnoverRatioTable))
+
+        )
+
     _filterAdvanceReceiptsPercent:(stockCode, advanceReceipt) ->
         return true if advanceReceipt is -1
         percent = @_getAdvanceReceiptsPercent(stockCode)
@@ -222,9 +236,12 @@ class GameLogic
         infoTable.push "\n总市值：#{utils.getValueDillion(@_balanceObj[stockCode].getTotalMarketValue() / 10000)}"
         infoTable.push "\n Top10: #{@_balanceObj[stockCode].getTop10()}"
         infoTable.push "\n有息负债: #{@_balanceObj[stockCode].getInterestDebt()}%"
-        infoTable.push "\n应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)}"
-        infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}%"
+        infoTable.push "\n应收账款周转天数: #{@_getReceivableTurnOverDays(stockCode)}, #{@_getIndustryAverage(stockCode, "应收账款")}"
+        infoTable.push "\n预收账款占总资产比例: #{@_getAdvanceReceiptsPercent(stockCode)}%， #{@_getIndustryAverage(stockCode, "预收账款")}"
+        infoTable.push "\n存货周转率:#{@_getInventoryTurnoverRatio(stockCode)}%, #{@_getIndustryAverage(stockCode, "存货")}%"
         infoTable.push "\n净利润： " + utils.getValueDillion(@_profitObj[stockCode].getNetProfitTable())
+        infoTable.push "\n毛利率: #{@_profitObj[stockCode].getSingleYearGrossProfitRatio()}, #{@_getIndustryAverage(stockCode, "毛利率")}%"
+        infoTable.push "\n净利率: #{@_profitObj[stockCode].getSingleYearNetProfitRatio()}, #{@_getIndustryAverage(stockCode, "净利率")}%"
         infoTable.push "\n年净利润增长率:   " + @_profitObj[stockCode].getNetProfitYoy()
         infoTable.push "\n净利润复合增长率:   " + @_profitObj[stockCode].getNetProfitAddRatio() + "%"
         infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))}"
@@ -241,5 +258,30 @@ class GameLogic
             ratioTable.push (workCashFlowTable[index] / netProfit).toFixed(2)
         ratioTable
 
+    _getInventoryTurnoverRatio: (stockCode)->
+        averageInventory = @_balanceObj[stockCode].getSingleYearAverageInventory()
+        operatingCosts = @_profitObj[stockCode].getOperatingCosts()[0]
+        ratio = (operatingCosts / averageInventory).toFixed(2)
+        ratio
+
+    _getIndustryAverage: (stockCode, type)->
+        industry = @_balanceObj[stockCode].getIndustry()
+        sameIndustryInfo = []
+        for stockCode in utils.getStockTable("allA")
+            stockCode = stockCode.slice(2, 8)
+            continue unless @_isAllTableLoadFinish(stockCode)
+            if (@_balanceObj[stockCode].getIndustry() is industry)
+                switch type
+                    when "存货"
+                        sameIndustryInfo.push @_getInventoryTurnoverRatio(stockCode)
+                    when "应收账款"
+                        sameIndustryInfo.push @_getReceivableTurnOverDays(stockCode)
+                    when "预收账款"
+                        sameIndustryInfo.push @_getAdvanceReceiptsPercent(stockCode)
+                    when "毛利率"
+                        sameIndustryInfo.push @_profitObj[stockCode].getSingleYearGrossProfitRatio()
+                    when "净利率"
+                        sameIndustryInfo.push @_profitObj[stockCode].getSingleYearNetProfitRatio()
+        return "同行平均：" + utils.getAverage(sameIndustryInfo)
 
 module.exports = GameLogic
