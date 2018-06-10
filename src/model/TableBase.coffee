@@ -79,6 +79,8 @@ class TableBase
 	        arrData[ arrData.length - 1 ].push( strMatchedValue );
 	    return arrData
 
+	getStockName: -> @_data["资料"][0]
+
 	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
 
 	getIndustry: -> @_data["资料"][2]

@@ -267,21 +267,40 @@ class GameLogic
     _getIndustryAverage: (stockCode, type)->
         industry = @_balanceObj[stockCode].getIndustry()
         sameIndustryInfo = []
+        sameIndustryInfoObj = {}
         for stockCode in utils.getStockTable("allA")
             stockCode = stockCode.slice(2, 8)
             continue unless @_isAllTableLoadFinish(stockCode)
             if (@_balanceObj[stockCode].getIndustry() is industry)
                 switch type
                     when "存货"
-                        sameIndustryInfo.push @_getInventoryTurnoverRatio(stockCode)
+                        value = @_getInventoryTurnoverRatio(stockCode)
+                        sameIndustryInfoObj[stockCode] = value
+                        sameIndustryInfo.push value
                     when "应收账款"
-                        sameIndustryInfo.push @_getReceivableTurnOverDays(stockCode)
+                        value = @_getReceivableTurnOverDays(stockCode)
+                        sameIndustryInfoObj[stockCode] = value
+                        sameIndustryInfo.push value
                     when "预收账款"
-                        sameIndustryInfo.push @_getAdvanceReceiptsPercent(stockCode)
+                        value = @_getAdvanceReceiptsPercent(stockCode)
+                        sameIndustryInfoObj[stockCode] = value
+                        sameIndustryInfo.push value
                     when "毛利率"
-                        sameIndustryInfo.push @_profitObj[stockCode].getSingleYearGrossProfitRatio()
+                        value = @_profitObj[stockCode].getSingleYearGrossProfitRatio()
+                        sameIndustryInfoObj[stockCode] = value
+                        sameIndustryInfo.push value
                     when "净利率"
-                        sameIndustryInfo.push @_profitObj[stockCode].getSingleYearNetProfitRatio()
-        return "同行平均：" + utils.getAverage(sameIndustryInfo)
+                        value = @_profitObj[stockCode].getSingleYearNetProfitRatio()
+                        sameIndustryInfoObj[stockCode] = value
+                        sameIndustryInfo.push value
+        info1 = "\t#{sameIndustryInfo.length}家同行"
+        info2 = "平均值：" + utils.getAverage(sameIndustryInfo)
+        sortedObjKeys = Object.keys(sameIndustryInfoObj).sort(
+            (a, b)->
+                return sameIndustryInfoObj[b] - sameIndustryInfoObj[a]
+        )
+        topStockCode = sortedObjKeys[0]
+        info3 = "\t最高:" + topStockCode + "---" + @_balanceObj[topStockCode].getStockName() + "：#{sameIndustryInfoObj[topStockCode]}"
+        return info1 + info2 + info3
 
 module.exports = GameLogic
