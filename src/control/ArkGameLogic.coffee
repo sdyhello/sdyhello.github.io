@@ -227,7 +227,7 @@ class GameLogic
 
     getStockDetailInfo: (stockCode)->
         infoTable = []
-        unless @_profitObj[stockCode]?
+        unless @_isAllTableLoadFinish(stockCode)
             @_loadFileToObj(stockCode)
             return "loadFile ok, try again!"
         infoTable.push "基本信息:   " + @_profitObj[stockCode].getBaseInfo()
