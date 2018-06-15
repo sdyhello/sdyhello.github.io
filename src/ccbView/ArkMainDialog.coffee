@@ -10,7 +10,7 @@ class ArkMainDialog
         @_datTable = []
         @_reset()
         @init()
-
+        TDGA?.onEvent("open_tool", {time: new Date()})
     _reset: ->
         @_scrollView = null
         @_stockCodeEditBox = null
@@ -80,7 +80,6 @@ class ArkMainDialog
         storage.setItem("years", years)
 
     onFilter: ->
-        TDGA?.onEvent("onFilter")
         @_setYears()
 
         profitAddRatio          = @_ccb_profitAddRatio.getString()
@@ -93,7 +92,7 @@ class ArkMainDialog
 
         storage.setItem("filterObj", {profitAddRatio, roe, pe, 
             advanceReceipt, receivableTurnoverDays, netProfitQuality, debt})
-
+        TDGA?.onEvent("onFilter", {profitAddRatio, roe, pe, advanceReceipt, receivableTurnoverDays, netProfitQuality, debt})
         eventManager.send eventNames.GAME_FILTER,
             profitAddRatio          : parseFloat(profitAddRatio)
             roe                     : parseFloat(roe)
@@ -126,7 +125,6 @@ class ArkMainDialog
         stockCode = @_ccb_stockCode.getString()
         storage.setItem("stockCode", stockCode)
         years = @_ccb_year.getString()
-        TDGA?.onEvent("onCalc", {stockCode, years})
         @_setYears()
         eventManager.send eventNames.GAME_GET_RESULT,
             stockCode: stockCode
