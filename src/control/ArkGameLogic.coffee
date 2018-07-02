@@ -247,7 +247,7 @@ class GameLogic
         infoTable.push "\n现金流量比净利润:   " + @_getNetProfitQuality(stockCode) + "平均:#{utils.getAverage(@_getNetProfitQuality(stockCode))}"
         infoTable.push "\n历年ROE:   " + @_getROE(stockCode) + "平均: #{utils.getAverage(@_getROE(stockCode))}%"
         infoTable.push "\n统计时间： #{@_balanceObj[stockCode].getExistYears()}"
-        TDGA?.onEvent("getStockInfo", {"info": stockCode + "------" + @_profitObj[stockCode].getBaseInfo()})
+        TDGA?.onEvent("getStockInfo", {"info": @_profitObj[stockCode].getBaseInfo()})
         console.log(infoTable)
         infoTable
 

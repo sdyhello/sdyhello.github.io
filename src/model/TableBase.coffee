@@ -82,7 +82,7 @@ class TableBase
 
 	getStockName: -> @_data["资料"][0]
 
-	getBaseInfo: -> @_data["资料"][0] + "------" + @_data["资料"][2]
+	getBaseInfo: -> @_stockCode + "------" + @_data["资料"][0] + "------" + @_data["资料"][2]
 
 	getIndustry: -> @_data["资料"][2]
 
