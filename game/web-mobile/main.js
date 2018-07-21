@@ -244,7 +244,7 @@
                 appID: '621582014',
                 appSecret: '5aa6823d64a7243529ba636e03d8ee66 ',
                 channel: '123',
-                version: '1'
+                version: '123'
             };
 
             if (!initArgs.appID || !initArgs.appSecret || !initArgs.version) {
