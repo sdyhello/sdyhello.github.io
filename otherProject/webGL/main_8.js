@@ -12,23 +12,14 @@ void main(){
 var fragmentShaderSrc = `
 precision mediump float;
 uniform sampler2D u_Sampler;
-uniform sampler2D u_Sampler1;
 varying vec2 v_TexCoord;
 void main(){
     vec4 color = texture2D(u_Sampler, v_TexCoord);
-    vec4 color1 = texture2D(u_Sampler1, v_TexCoord);
-    if (color1.a > 0.0){
-        gl_FragColor.r = color1.r;
-        gl_FragColor.g = color1.g;
-        gl_FragColor.b = color1.b;
-        gl_FragColor.a = color1.a;
-    }else{
-        gl_FragColor.r = color.r;
-        gl_FragColor.g = color.g;
-        gl_FragColor.b = color.b;
-        gl_FragColor.a = color.a;
-
+    if(color.b > 0.5){
+        color.a = 0.0;
     }
+    gl_FragColor = color;
+    
 }`;
 
 var g_LoadImage = false;
@@ -40,10 +31,18 @@ function initShader(gl) {
     var vertexShader = gl.createShader(gl.VERTEX_SHADER);// 创建顶点着色器
     gl.shaderSource(vertexShader, vertexShaderSrc);// 绑定顶点着色器源码
     gl.compileShader(vertexShader);// 编译定点着色器
+    if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+        console.log(gl.getShaderInfoLog(vertexShader));
+        return;
+    }
 
     var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);// 创建片段着色器
     gl.shaderSource(fragmentShader, fragmentShaderSrc);// 绑定片段着色器源码
     gl.compileShader(fragmentShader);// 编译片段着色器
+    if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+        console.log(gl.getShaderInfoLog(fragmentShader));
+        return;
+    }
 
     var shaderProgram = gl.createProgram();// 创建着色器程序
     gl.attachShader(shaderProgram, vertexShader);// 指定顶点着色器
@@ -90,12 +89,7 @@ function initTexture(gl, n){
     image.onload = function(){
         loadTexture(gl, n, u_Sampler, image, 0);
     }
-    image1.onload = function(){
-        loadTexture(gl, n, u_Sampler1, image1, 1);
-    }
-
-    image.src = "./HelloWorld.jpg"
-    image1.src = "./HelloWorld.png"
+    image.src = "./HelloWorld.png"
 }
 
 function main() {
@@ -130,13 +124,12 @@ function loadTexture(gl, n, u_Sampler, image, texUnit){
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-    var color = (texUnit === 0)?gl.RGB: gl.RGBA
+    var color = gl.RGBA;
 
     gl.texImage2D(gl.TEXTURE_2D, 0, color, color, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_Sampler, texUnit)
-    if(g_LoadImage && g_LoadImage1){
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
-    }
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+
 }
 
 
