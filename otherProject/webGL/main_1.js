@@ -1,3 +1,8 @@
+//利用webGL 画下个点
+//1、一个顶点着色器，一个片段着色器
+//2、初始化着色器
+//3、设置顶点数据
+
 // 顶点着色器源码
 var vertexShaderSrc = `
 attribute vec4 a_Position;
