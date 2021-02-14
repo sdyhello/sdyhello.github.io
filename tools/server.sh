@@ -2,7 +2,7 @@ echo "start server ......"
 
 if [ "$1" == "release" ]
 then
-    cd publish/html5
+    cd ../stock_tool
 fi
 
 pid=$(ps -ef | grep "python" | grep -v grep | awk '{print $2}')
