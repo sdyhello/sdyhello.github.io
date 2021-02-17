@@ -1,9 +1,7 @@
 echo "start server ......"
 
-if [ "$1" == "release" ]
-then
-    cd ../stock_tool
-fi
+
+cd ../stock_tool
 
 pid=$(ps -ef | grep "python" | grep -v grep | awk '{print $2}')
 
